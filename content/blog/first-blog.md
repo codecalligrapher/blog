@@ -1,6 +1,7 @@
 ---
 title: "First Blog"
 date: 2022-06-10T14:38:42-04:00
+math: true
 ---
 {{< math.inline >}}
 {{ if or .Page.Params.math .Site.Params.math }}
