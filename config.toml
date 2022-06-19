@@ -1,4 +1,9 @@
-baseURL = 'http://aadi350.github.io/blog/'
+baseURL = 'https://aadi-blogs.web.app/'
 languageCode = 'en-us'
 title = 'Aadi Blog'
 theme = 'hugo-PaperMod'
+
+
+[social]
+    twitter = "https://twitter.com/cats"
+    github = "https://github.com/cats"
