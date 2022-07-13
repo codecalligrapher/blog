@@ -1,128 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
-<title>First Blog | Aadi Blog</title>
-<meta name="keywords" content="">
-<meta name="description" content="This is a test content Equations lol $$ \sum_i $$">
-<meta name="author" content="">
-<link rel="canonical" href="https://aadi-blogs.web.app/blog/first-blog/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.d7fb4cbf980fe688a21621b06a795933c4e6bb2d4070ec940667af1715d84af2.css" integrity="sha256-1/tMv5gP5oiiFiGwanlZM8Tmuy1AcOyUBmevFxXYSvI=" rel="preload stylesheet" as="style">
-<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
-    onload="hljs.initHighlightingOnLoad();"></script>
-<link rel="icon" href="https://aadi-blogs.web.app/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://aadi-blogs.web.app/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://aadi-blogs.web.app/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://aadi-blogs.web.app/apple-touch-icon.png">
-<link rel="mask-icon" href="https://aadi-blogs.web.app/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
-
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --hljs-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
-</noscript><meta property="og:title" content="First Blog" />
-<meta property="og:description" content="This is a test content Equations lol $$ \sum_i $$" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://aadi-blogs.web.app/blog/first-blog/" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2022-06-10T14:38:42-04:00" />
-<meta property="article:modified_time" content="2022-06-10T14:38:42-04:00" />
-
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="First Blog"/>
-<meta name="twitter:description" content="This is a test content Equations lol $$ \sum_i $$"/>
-<meta name="twitter:site" content="@https://twitter.com/cats"/>
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Blogs",
-      "item": "https://aadi-blogs.web.app/blog/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "First Blog",
-      "item": "https://aadi-blogs.web.app/blog/first-blog/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "First Blog",
-  "name": "First Blog",
-  "description": "This is a test content Equations lol $$ \\sum_i $$",
-  "keywords": [
-    
-  ],
-  "articleBody": " This is a test content Equations lol $$ \\sum_i $$\n",
-  "wordCount" : "10",
-  "inLanguage": "en",
-  "datePublished": "2022-06-10T14:38:42-04:00",
-  "dateModified": "2022-06-10T14:38:42-04:00",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://aadi-blogs.web.app/blog/first-blog/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Aadi Blog",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://aadi-blogs.web.app/favicon.ico"
-    }
-  }
-}
-</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<head><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
 
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body);"></script>
 
-
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false }
+            ]
+        });
+    });
+</script>
 </head>
 
 <body class="" id="top">

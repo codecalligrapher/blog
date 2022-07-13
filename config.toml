@@ -1,9 +1,33 @@
 baseURL = 'https://aadi-blogs.web.app/'
 languageCode = 'en-us'
-title = 'Aadi Blog'
+title = 'Aadis Blog'
 theme = 'hugo-PaperMod'
 
 
 [social]
     twitter = "https://twitter.com/cats"
     github = "https://github.com/cats"
+
+[params]
+defaultTheme = 'dark'
+
+[params.homeInfoParams]
+Title = 'Hi, my name is Aadidev'
+Content = "I'm a data scientist who's worked on million-dollar projects, put machine-learning models into production and contributed to deep learning research"
+
+[[params.socialIcons]]
+name = 'github'
+url = "https://github.com/aadi350"
+
+[[params.socialIcons]]
+name = 'email'
+url = 'mailto:aadidev.sooknanan@gmail.com'
+
+[[params.socialIcons]]
+name = 'linkedin'
+url = 'https://www.linkedin.com/in/aadidev-sooknanan/'
+
+[[params.socialIcons]]
+name = 'twitter'
+url = 'https://twitter.com/__aadiDev__/'
+

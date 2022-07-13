@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Aadi Blog</title>
+    <title>Aadis Blog</title>
     <link>https://aadi-blogs.web.app/</link>
-    <description>Recent content on Aadi Blog</description>
+    <description>Recent content on Aadis Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Jun 2022 14:43:39 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 13 Jul 2022 06:20:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>:Test</title>
-      <link>https://aadi-blogs.web.app/blog/test/</link>
-      <pubDate>Fri, 10 Jun 2022 14:43:39 -0400</pubDate>
+      <title>Basics of The Adjacency Matrix</title>
+      <link>https://aadi-blogs.web.app/blog/matrix-graph/</link>
+      <pubDate>Wed, 13 Jul 2022 06:20:42 -0400</pubDate>
       
-      <guid>https://aadi-blogs.web.app/blog/test/</guid>
-      <description>TESTING</description>
+      <guid>https://aadi-blogs.web.app/blog/matrix-graph/</guid>
+      <description>This summarizes my initial set of basic notes surrounding the adjacency matrix representation of a graph
+There are multiple ways of representing graph-structured data. One of the most common ways is using the adjacency matrix, where connections between nodes are represented in a row-column format.
+For example:
+$$ A = \begin{bmatrix} 0 &amp;amp; 1 &amp;amp; 0 \\ 1 &amp;amp; 0 &amp;amp; 1 \\ 0 &amp;amp; 1 &amp;amp; 0 \end{bmatrix} $$</description>
     </item>
     
     <item>
-      <title>First Blog</title>
-      <link>https://aadi-blogs.web.app/blog/first-blog/</link>
-      <pubDate>Fri, 10 Jun 2022 14:38:42 -0400</pubDate>
+      <title>The Graph Neural Network</title>
+      <link>https://aadi-blogs.web.app/blog/graph-neural-network/</link>
+      <pubDate>Sat, 25 Jun 2022 06:38:42 -0400</pubDate>
       
-      <guid>https://aadi-blogs.web.app/blog/first-blog/</guid>
-      <description>This is a test content Equations lol $$ \sum_i $$</description>
+      <guid>https://aadi-blogs.web.app/blog/graph-neural-network/</guid>
+      <description>The Graph Neural Network (GNN) was proposed (Scarselli, 2008) as a general framework for defining deep neural networks on graph data.
+(If you need a refresher on deep learning, see here)
+The idea was to somehow utilize a deep neural network to generate node-embeddings in a generalize-able way to graph-structured data. The main idea in utilizing neural networks was that, apart from node features (degree, attributes, etc), the actual structure of the node&amp;rsquo;s neighbourhood, and by extension the graph, should contribute somehow to the node embeddings.</description>
     </item>
     
   </channel>
