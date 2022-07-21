@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Unravelling `tf.einsum` | Aadis Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="Origin Story Recently, I was trying to disect the original DCNN Paper which utilized a diffusion kernel to more readily make use of implicit graph-structure in common tasks such as node, edge and graph classification. However, an existing implementation I fonund had a curious piece of notation which led me down the rabbithole of Tensor calculus.
+Coordinates are maps used to solve a given problem. A coordinate transform allows mapping from one frame of reference to another (converting from a map of your high school, to the location of your high school in reference to where it is in the city, compared to a country-wide map).">
+<meta name="author" content="">
+<link rel="canonical" href="https://aadi-blogs.web.app/blog/tf-einsum/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.d7fb4cbf980fe688a21621b06a795933c4e6bb2d4070ec940667af1715d84af2.css" integrity="sha256-1/tMv5gP5oiiFiGwanlZM8Tmuy1AcOyUBmevFxXYSvI=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://aadi-blogs.web.app/favicon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://aadi-blogs.web.app/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://aadi-blogs.web.app/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://aadi-blogs.web.app/apple-touch-icon.png">
+<link rel="mask-icon" href="https://aadi-blogs.web.app/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Unravelling `tf.einsum`" />
+<meta property="og:description" content="Origin Story Recently, I was trying to disect the original DCNN Paper which utilized a diffusion kernel to more readily make use of implicit graph-structure in common tasks such as node, edge and graph classification. However, an existing implementation I fonund had a curious piece of notation which led me down the rabbithole of Tensor calculus.
+Coordinates are maps used to solve a given problem. A coordinate transform allows mapping from one frame of reference to another (converting from a map of your high school, to the location of your high school in reference to where it is in the city, compared to a country-wide map)." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://aadi-blogs.web.app/blog/tf-einsum/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2022-07-18T23:00:42-04:00" />
+<meta property="article:modified_time" content="2022-07-18T23:00:42-04:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Unravelling `tf.einsum`"/>
+<meta name="twitter:description" content="Origin Story Recently, I was trying to disect the original DCNN Paper which utilized a diffusion kernel to more readily make use of implicit graph-structure in common tasks such as node, edge and graph classification. However, an existing implementation I fonund had a curious piece of notation which led me down the rabbithole of Tensor calculus.
+Coordinates are maps used to solve a given problem. A coordinate transform allows mapping from one frame of reference to another (converting from a map of your high school, to the location of your high school in reference to where it is in the city, compared to a country-wide map)."/>
+<meta name="twitter:site" content="@https://twitter.com/cats"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blogs",
+      "item": "https://aadi-blogs.web.app/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Unravelling `tf.einsum`",
+      "item": "https://aadi-blogs.web.app/blog/tf-einsum/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Unravelling `tf.einsum`",
+  "name": "Unravelling `tf.einsum`",
+  "description": "Origin Story Recently, I was trying to disect the original DCNN Paper which utilized a diffusion kernel to more readily make use of implicit graph-structure in common tasks such as node, edge and graph classification. However, an existing implementation I fonund had a curious piece of notation which led me down the rabbithole of Tensor calculus.\nCoordinates are maps used to solve a given problem. A coordinate transform allows mapping from one frame of reference to another (converting from a map of your high school, to the location of your high school in reference to where it is in the city, compared to a country-wide map).",
+  "keywords": [
+    
+  ],
+  "articleBody": " Origin Story Recently, I was trying to disect the original DCNN Paper which utilized a diffusion kernel to more readily make use of implicit graph-structure in common tasks such as node, edge and graph classification. However, an existing implementation I fonund had a curious piece of notation which led me down the rabbithole of Tensor calculus.\nCoordinates are maps used to solve a given problem. A coordinate transform allows mapping from one frame of reference to another (converting from a map of your high school, to the location of your high school in reference to where it is in the city, compared to a country-wide map).\nTo say a number is a sclar means that the value does no change when transformed from one coordinate system to another (e.g. the distance between two points on a flat plain is irrespective of where true north is).\nA vector is directional, and can be formed on the basis of the reference set of coordinates. For example, a vector between your home and the nearest fire-station can be broken down into a sum of north- and east-facing vectors.\nTensors A tensor describes the superset of transformations which include scalars and vectors:\n$0$-tensors are constant functions, which we identify as scalars $1$-tensors are linear functions, which we call vectors $2$-tensors are bilinear functions, which we call matrices A Tensor describes any general transformation, independent of any basis function between sets of algebraic objects related to a vector space\nBack to the paper, there was a particular function which claimed to do batch matrix multiplication:\ntf.einsum('ijk,kl-\u003eijl', A, B) where $A$ was the diffusion kernel and $B$ was a feature vector (and tf was tensorflow). So $A$ would have dimensions (batch_size, m, n) and $B$ would have dimensions (n, k), where:\nbatch_size: number of nodes to process in a given batch (for model trainining) n: number of features m: number of nodes k: number of “hops” Ignoring the technicalities of the paper and the actual definitions above, I wanted to know what the actual heck this strange einsum function was trying to do\nEinstein Summation Enter Einstein summation: In “Einstein” summation, the repeated index defines what we sum by, the expression must have a repeated index, so: $$ \\sum_{i=1}^n = a_1x_1 + a_2x_2 + … + a_nx_n \\equiv a_ix_i $$ is valid. But $a_{ij}x_k$ is not, whilst $a_{ij}x_j$ is: $$ a_{ij}x_j \\equiv a_{i1}x_1 + a_{i2}x_2 + … + a_{in}x_n $$\nDouble sums are handled as follows, for example summation on both $i$ and $j$: $$ a_{ij}x_iy_j $$\nIn the einsum function, the first argument ijk,kl-\u003eijl signified summation on the $k^{th}$ dimension\nNow that I understood what the notation meant, I wanted a better grasp on the actual mechanics behind the function. Using synthetic Tensors as follows:\nk = 2 batch_size, m, n = None, 4, 2 init = tf.random.uniform(shape=(m, n), minval=0, maxval=16, dtype=tf.int32) A = tf.Variable(init) A = tf.expand_dims(A, 0) A init = tf.random.uniform(shape=(n, k), minval=0, maxval=16, dtype=tf.int32) B = tf.Variable(init) B ",
+  "wordCount" : "934",
+  "inLanguage": "en",
+  "datePublished": "2022-07-18T23:00:42-04:00",
+  "dateModified": "2022-07-18T23:00:42-04:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://aadi-blogs.web.app/blog/tf-einsum/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Aadis Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://aadi-blogs.web.app/favicon.png"
+    }
+  }
+}
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false }
+            ]
+        });
+    });
+</script>
+
+</head>
+
+<body class=" dark" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://aadi-blogs.web.app/" accesskey="h" title="Aadis Blog (Alt + H)">Aadis Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Unravelling `tf.einsum`
+    </h1>
+    <div class="post-meta"><span title='2022-07-18 23:00:42 -0400 AST'>July 18, 2022</span>
+
+</div>
+  </header> 
+  <div class="post-content">
+<h2 id="origin-story">Origin Story<a hidden class="anchor" aria-hidden="true" href="#origin-story">#</a></h2>
+<p>Recently, I was trying to disect the original <a href="https://arxiv.org/abs/1511.02136v6">DCNN Paper</a> which utilized a <em>diffusion</em> kernel to more readily make use of implicit graph-structure in common tasks such as node, edge and graph classification. However, an existing implementation I fonund had a curious piece of notation which led me down the rabbithole of Tensor calculus.</p>
+<p>Coordinates are maps used to solve a given problem. A coordinate transform allows mapping from one frame of reference to another (converting from a map of your high school, to the location of your high school in reference to where it is in the city, compared to a country-wide map).</p>
+<p>To say a number is a sclar means that the value does no change when transformed from one coordinate system to another (e.g. the distance between two points on a flat plain is irrespective of where true north is).</p>
+<p>A vector is directional, and can be formed on the basis of the reference set of coordinates. For example, a vector between your home and the nearest fire-station can be broken down into a sum of north- and east-facing vectors.</p>
+<h2 id="tensors">Tensors<a hidden class="anchor" aria-hidden="true" href="#tensors">#</a></h2>
+<p>A tensor describes the superset of transformations which include scalars and vectors:</p>
+<ul>
+<li>$0$-tensors are constant functions, which we identify as scalars</li>
+<li>$1$-tensors are linear functions, which we call vectors</li>
+<li>$2$-tensors are bilinear functions, which we call matrices</li>
+</ul>
+<p>A <strong>Tensor</strong> describes any general transformation, independent of any basis function between sets of algebraic objects related to a vector space</p>
+<hr>
+<p>Back to the paper, there was a particular function which claimed to do batch matrix multiplication:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>tf<span style="color:#f92672">.</span>einsum(<span style="color:#e6db74">&#39;ijk,kl-&gt;ijl&#39;</span>, A, B)
+</span></span></code></pre></div><p>where $A$ was the diffusion kernel and $B$ was a feature vector (and <code>tf</code> was <code>tensorflow</code>). So $A$ would have dimensions (batch_size, m, n) and $B$ would have dimensions (n, k), where:</p>
+<ul>
+<li>batch_size: number of nodes to process in a given batch (for model trainining)</li>
+<li>n: number of features</li>
+<li>m: number of nodes</li>
+<li>k: number of &ldquo;hops&rdquo;</li>
+</ul>
+<p>Ignoring the technicalities of the paper and the actual definitions above, I wanted to know what the actual heck this strange <code>einsum</code> function was trying to do</p>
+<h2 id="einstein-summation">Einstein Summation<a hidden class="anchor" aria-hidden="true" href="#einstein-summation">#</a></h2>
+<p>Enter <em>Einstein</em> summation:
+In &ldquo;Einstein&rdquo; summation, the repeated index defines what we sum by, the expression must have a repeated index, so:
+$$
+\sum_{i=1}^n = a_1x_1 + a_2x_2 + &hellip; + a_nx_n \equiv a_ix_i
+$$
+is valid. But $a_{ij}x_k$ is not, whilst $a_{ij}x_j$ is:
+$$
+a_{ij}x_j \equiv a_{i1}x_1 + a_{i2}x_2 + &hellip; + a_{in}x_n
+$$</p>
+<p>Double sums are handled as follows, for example summation on both $i$ and $j$:
+$$
+a_{ij}x_iy_j
+$$</p>
+<p>In the <code>einsum</code> function, the first argument <code>ijk,kl-&gt;ijl</code> signified summation on the $k^{th}$ dimension</p>
+<hr>
+<p>Now that I understood what the notation meant, I wanted a better grasp on the actual mechanics behind the function. Using synthetic Tensors as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>k <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>batch_size, m, n <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>init <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(shape<span style="color:#f92672">=</span>(m, n), minval<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, maxval<span style="color:#f92672">=</span><span style="color:#ae81ff">16</span>, dtype<span style="color:#f92672">=</span>tf<span style="color:#f92672">.</span>int32)
+</span></span><span style="display:flex;"><span>A <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>Variable(init)
+</span></span><span style="display:flex;"><span>A <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>expand_dims(A, <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>A
+</span></span></code></pre></div><pre><code>&lt;tf.Tensor: shape=(1, 4, 2), dtype=int32, numpy=
+array([[[14,  4],
+        [ 4, 12],
+        [ 9, 13],
+        [ 0, 13]]], dtype=int32)&gt;
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>init <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(shape<span style="color:#f92672">=</span>(n, k), minval<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, maxval<span style="color:#f92672">=</span><span style="color:#ae81ff">16</span>, dtype<span style="color:#f92672">=</span>tf<span style="color:#f92672">.</span>int32)
+</span></span><span style="display:flex;"><span>B <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>Variable(init)
+</span></span><span style="display:flex;"><span>B
+</span></span></code></pre></div><pre><code>&lt;tf.Variable 'Variable:0' shape=(2, 2) dtype=int32, numpy=
+array([[3, 9],
+       [5, 1]], dtype=int32)&gt;
+</code></pre>
+<h3 id="tfmatmul"><code>tf.matmul</code><a hidden class="anchor" aria-hidden="true" href="#tfmatmul">#</a></h3>
+<p>Here is where I used the two prior defined Tensors to basically see what would happen. It was also at this point I realised that TensorFlow 2 now included a function <code>matmul</code> which essentially did the same!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>C <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>einsum(<span style="color:#e6db74">&#39;ijk,kl-&gt;ijl&#39;</span>, A, B)
+</span></span><span style="display:flex;"><span>C
+</span></span></code></pre></div><pre><code>&lt;tf.Tensor: shape=(1, 4, 2), dtype=int32, numpy=
+array([[[ 62, 130],
+        [ 72,  48],
+        [ 92,  94],
+        [ 65,  13]]], dtype=int32)&gt;
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>tf<span style="color:#f92672">.</span>matmul(A, B)
+</span></span></code></pre></div><pre><code>&lt;tf.Tensor: shape=(1, 4, 2), dtype=int32, numpy=
+array([[[ 62, 130],
+        [ 72,  48],
+        [ 92,  94],
+        [ 65,  13]]], dtype=int32)&gt;
+</code></pre>
+<h2 id="minimum-viable-example">Minimum-Viable Example<a hidden class="anchor" aria-hidden="true" href="#minimum-viable-example">#</a></h2>
+<p>Okay, now simplifying even further; firstly by creating a rank-2 tensor (i.e. a matrix) using numpy and then finding the matrix product</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>A <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>matrix(<span style="color:#e6db74">&#39;&#39;&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    1 4;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    2 3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>B <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>matrix(<span style="color:#e6db74">&#39;&#39;&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    5 7;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    6 8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C <span style="color:#f92672">=</span> A <span style="color:#f92672">@</span> B
+</span></span><span style="display:flex;"><span>C
+</span></span></code></pre></div><pre><code>matrix([[29, 39],
+        [28, 38]])
+</code></pre>
+<p>Every element in $C$, $C_{ik}$ is:
+$$
+C_{ik} = \sum_jA_{ij}B_{jk}
+$$</p>
+<p>$C_{01} = 39$ so</p>
+<p>$$
+C_{01} = \sum_j A_{0j} B_{j1} (1\times 7)_ {j=0} + (4\times 8)_{j=1}
+$$</p>
+<p>Followed by converting the above matrices to TensorFlow objects and repeating the operation to somehow test that I grasped the notation:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>A <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>convert_to_tensor(A)
+</span></span><span style="display:flex;"><span>B <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>convert_to_tensor(B)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>A, B
+</span></span></code></pre></div><pre><code>(&lt;tf.Tensor: shape=(2, 2), dtype=int64, numpy=
+ array([[1, 4],
+        [2, 3]])&gt;,
+ &lt;tf.Tensor: shape=(2, 2), dtype=int64, numpy=
+ array([[5, 7],
+        [6, 8]])&gt;)
+</code></pre>
+<p>It worked! The output of <code>einsum</code> below is consistent with <code>matmul</code> above</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># equivalent to A @ B or tf.matmul(A, B)</span>
+</span></span><span style="display:flex;"><span>tf<span style="color:#f92672">.</span>einsum(<span style="color:#e6db74">&#39;ij,jk-&gt;ik&#39;</span>, A, B)
+</span></span></code></pre></div><pre><code>&lt;tf.Tensor: shape=(2, 2), dtype=int64, numpy=
+array([[29, 39],
+       [28, 38]])&gt;
+</code></pre>
+<h2 id="slightly-less-minimum-example">Slightly-Less Minimum Example<a hidden class="anchor" aria-hidden="true" href="#slightly-less-minimum-example">#</a></h2>
+<p>Now on to a slightly more complex example, I created a rank-2 Tensor and a rank-1 Tensor for multiplication against</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># applying to batch case</span>
+</span></span><span style="display:flex;"><span>A <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>Variable([
+</span></span><span style="display:flex;"><span>    [[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>]],
+</span></span><span style="display:flex;"><span>    [[<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>], 
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">9</span>]]
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>B <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>Variable(
+</span></span><span style="display:flex;"><span>    [[<span style="color:#ae81ff">2</span>], [<span style="color:#ae81ff">1</span>]]
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>A<span style="color:#f92672">.</span>shape, B<span style="color:#f92672">.</span>shape
+</span></span></code></pre></div><pre><code>(TensorShape([2, 2, 2]), TensorShape([2, 1]))
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>tf<span style="color:#f92672">.</span>matmul(A, B)
+</span></span></code></pre></div><pre><code>&lt;tf.Tensor: shape=(2, 2, 1), dtype=int32, numpy=
+array([[[ 4],
+        [10]],
+
+       [[11],
+        [13]]], dtype=int32)&gt;
+</code></pre>
+<p>For the $ijl^{th}$ element in $C$, sum across the $k^{th}$ dimension in A and B</p>
+<pre tabindex="0"><code>output[i,j,l] = sum_k A[i,j,k] * B[k, l]
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># for the ijl-th element in C, </span>
+</span></span><span style="display:flex;"><span>C <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>einsum(<span style="color:#e6db74">&#39;ijk,kl-&gt;ijl&#39;</span>, A, B)
+</span></span><span style="display:flex;"><span>C
+</span></span></code></pre></div><pre><code>&lt;tf.Tensor: shape=(2, 2, 1), dtype=int32, numpy=
+array([[[ 4],
+        [10]],
+
+       [[11],
+        [13]]], dtype=int32)&gt;
+</code></pre>
+<p>and success! I think I have a fair grasp on how <code>einsum</code> and Einstein summation works, and how/why it can be sometimes simpler just to use the built-in <code>matmul</code> function, but also where batch dimensions may mess with the built-in functions and we would want to define it in finer detail</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://aadi-blogs.web.app/">Aadis Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

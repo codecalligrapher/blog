@@ -3,6 +3,24 @@ languageCode = 'en-us'
 title = 'Aadis Blog'
 theme = 'hugo-PaperMod'
 
+[menu]
+[[menu.main]]
+  identifier = 'blog'
+  name = 'blogs'
+  pre = "<i class='fa fa-heart'></i>"
+  url = '/blog/'
+  weight = -110
+  [menu.main.params]
+    class = 'highlight-menu-item'
+
+[[menu.main]]
+  identifier = 'code'
+  name = 'code'
+  pre = "<i class='fa fa-heart'></i>"
+  url = '/code/'
+  weight = -110
+  [menu.main.params]
+    class = 'highlight-menu-item'
 
 [social]
     twitter = "https://twitter.com/cats"
@@ -10,6 +28,12 @@ theme = 'hugo-PaperMod'
 
 [params]
 defaultTheme = 'dark'
+showShareButtons = 'true'
+showReadingTime = 'true'
+showBreadCrumbs = 'true'
+
+[params.cover]
+linkFullImages = 'true'
 
 [params.homeInfoParams]
 Title = 'Hi, my name is Aadidev'
