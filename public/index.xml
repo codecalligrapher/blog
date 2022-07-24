@@ -6,7 +6,16 @@
     <description>Recent content on Aadis Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Jul 2022 23:00:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 21 Jul 2022 06:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PySpark Fill Rates</title>
+      <link>https://aadi-blogs.web.app/code/pyspark-fill-rate/</link>
+      <pubDate>Thu, 21 Jul 2022 06:38:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/pyspark-fill-rate/</guid>
+      <description>import pyspark # missing values per column for k, v in sorted( table.agg(*[ (1 - (F.count(c) / F.count(&amp;#39;*&amp;#39;))) .alias(c + &amp;#39;_miss&amp;#39;) for c in table.columns]) .collect()[0] # retrieve all data to driver .asDict() # convert to python dictionary .items() # retrieve key-value pairs , key=lambda el: el[1] , reverse=True): print(k, v) </description>
+    </item>
+    
     <item>
       <title>Unravelling `tf.einsum`</title>
       <link>https://aadi-blogs.web.app/blog/tf-einsum/</link>
