@@ -6,7 +6,26 @@
     <description>Recent content on Aadis Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 21 Jul 2022 06:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Graph Diffusion</title>
+      <link>https://aadi-blogs.web.app/blog/graph-diffusion/</link>
+      <pubDate>Mon, 25 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/graph-diffusion/</guid>
+      <description>This is taken from Diffusion Convolutional Neural Networks (referenced in the footer). According to the authors, a diffusion convolution scans a diffusion process across each node. Analog to biology, where the information is allowed to propagate conditional of its density and environment.
+It was applied to node classification, edge classification and graph classification, but node-classification is the task I wanted to focus on. When first presented, it was a novel way to effectively apply convolutions (invariant to location and rotation), to arbitrarily-structured data (i.</description>
+    </item>
+    
+    <item>
+      <title>Sync Script</title>
+      <link>https://aadi-blogs.web.app/code/sync-script/</link>
+      <pubDate>Sun, 24 Jul 2022 12:38:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/sync-script/</guid>
+      <description>#!/usr/bin/zsh while getopts a: flag do case &amp;#34;${flag}&amp;#34; in a) remote=${OPTARG};; esac done echo &amp;#34;remote IP: $remote&amp;#34;; echo &amp;#34;write: $final&amp;#34;; home_dir=&amp;#34;/home/aadi/&amp;#34; storage_dir=&amp;#34;/storage/&amp;#34; # files in home HomeArray=( &amp;#34;.zshrc&amp;#34; ) if [[ $* == *--write* ]] then for arr in $HomeArray; do rsync -Pvtau $home_dir$arr aadi@$remote:$home_dir$arr done else for arr in $HomeArray; do rsync -Pvntau $home_dir$arr aadi@$remote:$home_dir$arr done fi # folders in home HomeArray=( &amp;#34;.config/alacritty&amp;#34; &amp;#34;.config/qtile&amp;#34; &amp;#34;.config/nvim&amp;#34; ) if [[ $* == *--write* ]] then for arr in $HomeArray; do rsync -Pvtau $home_dir$arr/ aadi@$remote:$home_dir$arr done else for arr in $HomeArray; do rsync -Pvntau $home_dir$arr/ aadi@$remote:$home_dir$arr done fi # files in storage SArray=( &amp;#34;reading&amp;#34; &amp;#34;research&amp;#34; ) if [[ $* == *--write* ]] then for arr in $SArray; do rsync -Pvtau $storage_dir$arr/ aadi@$remote:$home_dir$arr done else for arr in $SArray; do rsync -Pvntau $storage_dir$arr/ aadi@$remote:$home_dir$arr done fi </description>
+    </item>
+    
     <item>
       <title>PySpark Fill Rates</title>
       <link>https://aadi-blogs.web.app/code/pyspark-fill-rate/</link>

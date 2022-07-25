@@ -6,7 +6,17 @@
     <description>Recent content in Blogs on Aadis Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Jul 2022 23:00:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Graph Diffusion</title>
+      <link>https://aadi-blogs.web.app/blog/graph-diffusion/</link>
+      <pubDate>Mon, 25 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/graph-diffusion/</guid>
+      <description>This is taken from Diffusion Convolutional Neural Networks (referenced in the footer). According to the authors, a diffusion convolution scans a diffusion process across each node. Analog to biology, where the information is allowed to propagate conditional of its density and environment.
+It was applied to node classification, edge classification and graph classification, but node-classification is the task I wanted to focus on. When first presented, it was a novel way to effectively apply convolutions (invariant to location and rotation), to arbitrarily-structured data (i.</description>
+    </item>
+    
     <item>
       <title>Unravelling `tf.einsum`</title>
       <link>https://aadi-blogs.web.app/blog/tf-einsum/</link>
