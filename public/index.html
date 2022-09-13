@@ -150,6 +150,22 @@
 </article>
 
 <article class="post-entry"> 
+<figure class="entry-cover"><img loading="lazy" src="https://aadi-blogs.web.app/blog/covers/awk_zero_pad.png" alt="">
+</figure>
+  <header class="entry-header">
+    <h2>Zero-Padding a CSV with AWK
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>This was purely out of sheer need, and this was the fastest way I could’ve gotten it done (I ended up learning a LOT about CLI and the awk command from this, so I’m really grateful for that)
+The problem: I have a column in a utf-8 CSV file of type Integer, which should actually be type string and zero-padded up to (let’s say length N).
+~/projects/awk_pad ❯ cat out.csv a,Y,1 b,N,10 c,Y,12223253 What I want, is the following (output from the cat tool):...</p>
+  </div>
+  <footer class="entry-footer"><span title='2022-08-26 00:00:00 +0000 +0000'>August 26, 2022</span>&nbsp;·&nbsp;2 min</footer>
+  <a class="entry-link" aria-label="post link to Zero-Padding a CSV with AWK" href="https://aadi-blogs.web.app/blog/awk_pad/"></a>
+</article>
+
+<article class="post-entry"> 
   <header class="entry-header">
     <h2>Graph Diffusion
     </h2>
@@ -202,6 +218,21 @@ The idea was to somehow utilize a deep neural network to generate node-embedding
   </div>
   <footer class="entry-footer"><span title='2022-06-25 06:38:42 -0400 AST'>June 25, 2022</span>&nbsp;·&nbsp;9 min</footer>
   <a class="entry-link" aria-label="post link to The Graph Neural Network" href="https://aadi-blogs.web.app/blog/graph-neural-network/"></a>
+</article>
+
+<article class="post-entry"> 
+<figure class="entry-cover"><img loading="lazy" src="https://aadi-blogs.web.app/blog/covers/CUDA.png" alt="">
+</figure>
+  <header class="entry-header">
+    <h2>Prefetching Memory in CUDA
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Threads, Blocks and Grids A thread is a single “process” on GPU. Any given GPU kernel can use blocks of threads, grouped into a grid of blocks. A kernel is executed as a grid of blocks of threads. Each block is run by a single Streaming Multiprocessor (SM) and in most usual, single-node cases can’t be migrated to other SMs. One SM may execute several CUDA blocks concurrently.
+Paging Paging is a memory-management technique which allows a process’s physical address space to be non-contiguous....</p>
+  </div>
+  <footer class="entry-footer">5 min</footer>
+  <a class="entry-link" aria-label="post link to Prefetching Memory in CUDA" href="https://aadi-blogs.web.app/blog/prefetch-cuda/"></a>
 </article>
     </main>
     

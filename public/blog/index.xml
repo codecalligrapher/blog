@@ -6,7 +6,18 @@
     <description>Recent content in Blogs on Aadis Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 25 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 26 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Zero-Padding a CSV with AWK</title>
+      <link>https://aadi-blogs.web.app/blog/awk_pad/</link>
+      <pubDate>Fri, 26 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/awk_pad/</guid>
+      <description>This was purely out of sheer need, and this was the fastest way I could&amp;rsquo;ve gotten it done (I ended up learning a LOT about CLI and the awk command from this, so I&amp;rsquo;m really grateful for that)
+The problem: I have a column in a utf-8 CSV file of type Integer, which should actually be type string and zero-padded up to (let&amp;rsquo;s say length N).
+~/projects/awk_pad ❯ cat out.csv a,Y,1 b,N,10 c,Y,12223253 What I want, is the following (output from the cat tool):</description>
+    </item>
+    
     <item>
       <title>Graph Diffusion</title>
       <link>https://aadi-blogs.web.app/blog/graph-diffusion/</link>
@@ -48,6 +59,16 @@ $$ A = \begin{bmatrix} 0 &amp;amp; 1 &amp;amp; 0 \\ 1 &amp;amp; 0 &amp;amp; 1 \\
       <description>The Graph Neural Network (GNN) was proposed (Scarselli, 2008) as a general framework for defining deep neural networks on graph data.
 (If you need a refresher on deep learning, see here)
 The idea was to somehow utilize a deep neural network to generate node-embeddings in a generalize-able way to graph-structured data. The main idea in utilizing neural networks was that, apart from node features (degree, attributes, etc), the actual structure of the node&amp;rsquo;s neighbourhood, and by extension the graph, should contribute somehow to the node embeddings.</description>
+    </item>
+    
+    <item>
+      <title>Prefetching Memory in CUDA</title>
+      <link>https://aadi-blogs.web.app/blog/prefetch-cuda/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/prefetch-cuda/</guid>
+      <description>Threads, Blocks and Grids A thread is a single &amp;ldquo;process&amp;rdquo; on GPU. Any given GPU kernel can use blocks of threads, grouped into a grid of blocks. A kernel is executed as a grid of blocks of threads. Each block is run by a single Streaming Multiprocessor (SM) and in most usual, single-node cases can&amp;rsquo;t be migrated to other SMs. One SM may execute several CUDA blocks concurrently.
+Paging Paging is a memory-management technique which allows a process&amp;rsquo;s physical address space to be non-contiguous.</description>
     </item>
     
   </channel>
