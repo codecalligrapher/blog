@@ -3,7 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://aadi-blogs.web.app/</loc>
-    <lastmod>2022-08-26T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-12T06:38:42-04:00</lastmod>
+  </url><url>
+    <loc>https://aadi-blogs.web.app/code/</loc>
+    <lastmod>2022-09-12T06:38:42-04:00</lastmod>
+  </url><url>
+    <loc>https://aadi-blogs.web.app/code/untangle-xml/</loc>
+    <lastmod>2022-09-12T06:38:42-04:00</lastmod>
   </url><url>
     <loc>https://aadi-blogs.web.app/blog/</loc>
     <lastmod>2022-08-26T00:00:00+00:00</lastmod>
@@ -13,9 +19,6 @@
   </url><url>
     <loc>https://aadi-blogs.web.app/blog/graph-diffusion/</loc>
     <lastmod>2022-07-25T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://aadi-blogs.web.app/code/</loc>
-    <lastmod>2022-07-24T12:38:42-04:00</lastmod>
   </url><url>
     <loc>https://aadi-blogs.web.app/code/sync-script/</loc>
     <lastmod>2022-07-24T12:38:42-04:00</lastmod>
