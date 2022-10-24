@@ -6,7 +6,18 @@
     <description>Recent content on Aadis Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 12 Sep 2022 06:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 19 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mapping Pandas Columns</title>
+      <link>https://aadi-blogs.web.app/blog/conditional-replace-pandas/</link>
+      <pubDate>Wed, 19 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/conditional-replace-pandas/</guid>
+      <description>A few weeks ago I had to figure out how to perform a mapping of pandas column values to other values. This was not necessarily a discrete mapping, as in the initial column value needed to match a range.
+The dataframe I was working with resembled the following:
+value 0 88 1 3 2 5 3 65 4 72 5 54 And there were a set of conditions by which I needed to replace.</description>
+    </item>
+    
     <item>
       <title>Parsing XML with untangle</title>
       <link>https://aadi-blogs.web.app/code/untangle-xml/</link>
