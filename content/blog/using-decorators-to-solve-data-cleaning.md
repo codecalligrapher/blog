@@ -1,6 +1,6 @@
 ---
 title: "Using Decorators to Solve Date Problems"
-date: 2022-10-23 T22:20:42-04:00
+date: 2022-10-23T22:00:00-00:00
 ---
 
 A `decorator` is the gateway drug into the world of Python metaprogramming. In python, everything, *everything*, is an object (specifically a dictionary but let's not go there). That means that we can pass in and return any object regardless of its types, **especially** regardless of its type. 

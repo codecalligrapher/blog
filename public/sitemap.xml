@@ -3,10 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://aadi-blogs.web.app/</loc>
-    <lastmod>2022-10-19T00:00:00+00:00</lastmod>
+    <lastmod>2022-10-23T22:00:00+00:00</lastmod>
   </url><url>
     <loc>https://aadi-blogs.web.app/blog/</loc>
-    <lastmod>2022-10-19T00:00:00+00:00</lastmod>
+    <lastmod>2022-10-23T22:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://aadi-blogs.web.app/blog/using-decorators-to-solve-data-cleaning/</loc>
+    <lastmod>2022-10-23T22:00:00+00:00</lastmod>
   </url><url>
     <loc>https://aadi-blogs.web.app/blog/conditional-replace-pandas/</loc>
     <lastmod>2022-10-19T00:00:00+00:00</lastmod>

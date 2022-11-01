@@ -6,7 +6,19 @@
     <description>Recent content on Aadis Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Oct 2022 22:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using Decorators to Solve Date Problems</title>
+      <link>https://aadi-blogs.web.app/blog/using-decorators-to-solve-data-cleaning/</link>
+      <pubDate>Sun, 23 Oct 2022 22:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/using-decorators-to-solve-data-cleaning/</guid>
+      <description>A decorator is the gateway drug into the world of Python metaprogramming. In python, everything, everything, is an object (specifically a dictionary but let&amp;rsquo;s not go there). That means that we can pass in and return any object regardless of its types, especially regardless of its type.
+If I define a function:
+def fn(*args, **kwargs): pass and now call type on fn
+type(fn) function the type is function (No surprises there).</description>
+    </item>
+    
     <item>
       <title>Mapping Pandas Columns</title>
       <link>https://aadi-blogs.web.app/blog/conditional-replace-pandas/</link>
