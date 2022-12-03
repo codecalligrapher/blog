@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python on Aadi</title>
+    <link>https://aadi-blogs.web.app/tags/python/</link>
+    <description>Recent content in python on Aadi</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>©2022 {year}</copyright>
+    <lastBuildDate>Wed, 09 Nov 2022 12:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Enforcing Function Implementation in Subclasses</title>
+      <link>https://aadi-blogs.web.app/blog/enforce-override/</link>
+      <pubDate>Wed, 09 Nov 2022 12:38:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/enforce-override/</guid>
+      <description>This is going to get very weird, very quickly. When you create a class in Python, it looks about like the following:
+class MyClass: pass Now, let&amp;rsquo;s say I create some really cool class, with a set of cool functions, but I expect my users to implement some of the functions:
+from abc import abstractmethod class BaseClass: @abstractmethod def foo(self,): raise NotImplementedError So the intention is, when my user inherits the above class, they do the following:</description>
+    </item>
+    
+    <item>
+      <title>Managed Attributes in Python</title>
+      <link>https://aadi-blogs.web.app/blog/metaprogramming-in-data-science/</link>
+      <pubDate>Sat, 05 Nov 2022 00:38:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/metaprogramming-in-data-science/</guid>
+      <description>In a previous post, I detailed how to maintain encapsulation using Python&amp;rsquo;s property. In this piece, I go through how/why to manage and apply validation to class attributes in an object-oriented fashion by means of a fairly plausible example.
+A type is the parent class of class, therefore any class is actually a sub-type of type. The following are equivalent:
+a = int(8) a = 8 type(a) # python knows to create an int without being explicit int The point of implementing custom attribute types is (in my case), for validation.</description>
+    </item>
+    
+  </channel>
+</rss>

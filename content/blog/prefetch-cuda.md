@@ -2,10 +2,6 @@
 title: "Prefetching Memory in CUDA"
 date: 2022-08-06:00:00-00:00
 math: true
-cover: 
-    image: "blog/covers/CUDA.png"
-    relative: true
-    
 ---
 {{< math.inline >}}
 {{ if or .Page.Params.math .Site.Params.math }}

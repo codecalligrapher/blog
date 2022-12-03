@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>TensorFlow Custom Loop | Aadi</title>
+
+  <meta charset="UTF-8">
+  <meta name="language" content="en">
+  <meta name="description" content="">
+  <meta name="keywords" content="machine-learning , tensorflow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  
+  
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="TensorFlow Custom Loop" />
+  <meta name="twitter:description" content=""/>
+  <meta name="twitter:site" content="@__aadiDev__" />
+  <meta name="twitter:creator" content="https://twitter.com/__aadiDev__" />
+  
+
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+
+
+  
+  
+    
+ 
+  
+  
+  
+  
+  
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/post.min.e698f6b3b067916a386cc08bdd04238ac76cc99155c3a0385cb5b85ea38beb30.css" integrity="sha256-5pj2s7BnkWo4bMCL3QQjisdsyZFVw6A4XLW4XqOL6zA="/>
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/custom.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" integrity="sha256-47DEQpj8HBSa&#43;/TImW&#43;5JCeuQeRkm5NMpJWZG3hSuFU="/>
+  
+  
+   
+   
+    
+
+<script type="application/ld+json">
+  
+    { 
+      "@context": "http://schema.org", 
+      "@type": "WebSite", 
+      "url": "https:\/\/aadi-blogs.web.app\/code\/tf-loop\/",
+      "name": "TensorFlow Custom Loop",
+      "author": {
+        "@type": "Person",
+        "name": ""
+      },
+      "description": ""
+    }
+  
+  </script>
+</head>
+
+<body>
+  <div class="burger__container">
+  <div class="burger" aria-controls="navigation" aria-label="Menu">
+    <div class="burger__meat burger__meat--1"></div>
+    <div class="burger__meat burger__meat--2"></div>
+    <div class="burger__meat burger__meat--3"></div>
+  </div>
+</div>
+ 
+
+  <nav class="nav" id="navigation">
+  <ul class="nav__list">
+    
+    
+      <li>
+        <a  href="/">about</a>
+      </li>
+    
+      <li>
+        <a  href="/blog">blog</a>
+      </li>
+    
+      <li>
+        <a  class="active"
+         href="/code">code</a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+  <main>
+    
+    
+
+    <div class="flex-wrapper">
+      <div class="post__container">
+        <div class="post">
+          <header class="post__header">
+            <h1 id="post__title">TensorFlow Custom Loop</h1>
+            <time datetime="2022-11-30 00:38:42 -0400 AST" class="post__date">Nov 30 2022</time> 
+          </header>
+          <article class="post__content">
+              
+<p>A pattern I use for pretty-progress bars, custom logging and metric-handling in <code>tensorflow</code>.</p>
+<pre><code class="language-python">'''
+This overviews the TensorFlow custom training loop in its (what I think is) most general sense. Four steps:
+    1. Define Model
+    2. Define Metrics, Optimizer and Losses
+    3. Define train and test (validation) functions
+    4. Write training loop
+'''
+import wandb
+import yaml
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+import numpy as np
+import enlighten
+import logging
+import time
+from dataclasses import dataclass
+
+
+
+# STEP 0 - Set up datasets
+
+'''
+---------------------------------------------------------
+STEP 1 - Define Model 
+
+Define inputs, outputs and wrap using keras
+'''
+inputs = ...
+outputs = ...
+model = keras.Model(inputs=inputs, outputs=outputs)
+
+'''
+---------------------------------------------------------
+STEP 2 - Define Metrics, Optimizer and Losses
+
+Use keras.metrics.Metric and keras.optimizers
+Can subclass if necessary
+
+'''
+train_metric = keras.metrics...
+val_metric = keras.metrics...
+
+optimizer = keras.optimizers...
+
+loss_fn = keras.losses...
+
+
+'''
+---------------------------------------------------------
+STEP 3 - Define training and test functions 
+
+both take inputs and labels
+both return a loss value
+
+training invoke tape and applies loss gradient to weights
+test just finds loss value
+
+'''
+
+@tf.function
+def train_step(input, labels):
+    # invoke GradientTape()
+    with tf.GradientTape() as tape:
+        # find predicted
+        pred = model(input, training=True) 
+        # calculate loss
+        loss_value = loss_fn(labels, pred)
+        loss_value += sum(model.losses)
+
+    # find gradient loss and weights
+    grads = tape.gradient(loss_value, model.trainable_weights)
+    # apply gradients to update weights
+    optimizer.apply_gradients(zip(grads, model.trainable_weights))
+
+    # update metric
+    train_metric.update_state(labels, pred)
+
+    return loss_value
+
+@tf.function
+def test_step(input, labels):
+    # find predicted
+    pred = model(input, training=False)
+    # update metric
+    val_metric.update_state(labels, pred)
+
+
+'''
+---------------------------------------------------------
+STEP 4 - Training/Validation Loop
+
+Remember to reset metric states
+
+'''
+
+#-------------------------------CONFIGURATION---------------------------------#
+@dataclass
+class ModelConf:
+    epochs: int
+    batch_size: int
+    learning_rate: float
+    dropout_rate: float
+
+wandb_config = {
+    &quot;entity&quot;: &quot;aadi350&quot;,
+    &quot;project&quot;: &quot;urban_heat_index&quot;,
+    &quot;model_name&quot;: &quot;vit&quot;,
+    ...
+}
+
+with open('path/to/conf.yaml', 'r') as f:
+    conf_file = yaml.load(f, Loader=yaml.SafeLoader)
+    m = ModelConf(
+        conf_file['epochs'],
+        conf_file['batch_size'],
+        conf_file['learning_rate'],
+        conf_file['dropout_rate'],
+        ...
+    )
+
+    wandb_config.update(
+       conf_file 
+    )
+    wandb.init(config=wandb_config)
+
+    m.epochs = conf_file['epochs']
+    m.batch_size = conf_file['batch_size']
+    m.learning_rate = conf_file['learning_rate']
+    ...
+#-----------------------------END CONFIGURATION-------------------------------#
+
+
+
+log_batch = 10
+
+# Set up logging
+mlog = logging.getLogger(&quot;metric_logger&quot;)
+handler = logging.StreamHandler()
+formatter = logging.Formatter(
+    &quot;%(asctime)s - %(message)s&quot;, datefmt=&quot;%Y-%m-%d %H:%M:%S&quot;
+)
+handler.setFormatter(formatter)
+mlog.addHandler(handler)
+mlog.setLevel(logging.DEBUG)
+
+# set up progress bar for epochs
+manager = enlighten.get_manager()
+epoch_counter = manager.counter(
+    total=m.epochs, desc=&quot;Epoch&quot;, unit=&quot;epochs&quot;, color=&quot;green&quot;
+)
+status_bar = manager.status_bar(
+    &quot;Best metrics&quot;, color=&quot;white_on_blue&quot;, justify=enlighten.Justify.CENTER
+)
+
+for epoch in range(m.epochs):
+    # progress bar for train step
+    step_counter = manager.counter(
+        total=m.epochs//m.batch_size
+        desc=&quot;Train Step&quot;,
+        unit=&quot;steps&quot;,
+        leave=False,
+        color=&quot;bright_green&quot;,
+    )
+    # ---------------------TRAIN------------------------#
+    for step, (in_batch_train, label_batch_train) in enumerate(train_dataset):
+        loss_value = train_step(in_batch_train, label_batch_train)
+        step_counter.update()
+
+
+    train_acc = train_metric.result()
+    train_loss = loss_value
+    mlog.info(&quot;Training acc over epoch: %.4f&quot; % (float(train_acc),))
+    train_metric.reset_states()
+    step_counter.close()
+
+    # ---------------------VAL---------------------------#
+    # progress bar for validation step
+    step_counter = manager.counter(
+        total=m.epochs//m.batch_size,
+        desc=&quot;Validation Step&quot;,
+        unit=&quot;steps&quot;,
+        leave=False,
+        color=&quot;bright_yellow&quot;,
+    )
+    # validation loop 
+    for step, (in_batch_val, label_batch_val) in enumerate(val_dataset):
+        test_step(in_batch_val, label_batch_val)
+    
+    val_acc = val_metric.result()
+    val_metric.reset_states()
+    step_counter.close()
+
+    # -------------------STATUS-----------------------------#
+    if best_val &lt; val_acc:
+        best_val = val_acc
+        status_bar.update(f&quot;Best validation metric: {best_val}, epoch: {epoch}&quot;)
+        tf.saved_model.save('path/to/model')
+    epoch_counter.update()
+
+    # -------------------WANDB------------------------------#
+    wandb.log(
+        {
+            &quot;train_loss&quot;: train_loss,
+            &quot;train_accuracy&quot;: train_acc,
+            &quot;val_accuracy&quot;: val_acc,
+        }
+    )
+
+</code></pre>
+
+
+              
+          </article>
+          
+
+ <div class="pagination">
+  
+    <a class="pagination__item" href="https://aadi-blogs.web.app/code/untangle-xml/">
+        <span class="pagination__label">Previous Post</span>
+        <span class="pagination__title">Parsing XML with untangle</span>
+    </a>
+  
+
+  
+</div>
+
+          
+          <footer class="post__footer">
+            
+
+
+<div class="social-icons">
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Twitter"
+        href="https://twitter.com/__aadiDev__"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/twitter.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="GitHub"
+        href="https://github.com/aadi350"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/github.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="LinkedIn"
+        href="https://www.linkedin.com/in/aadidev-sooknanan/"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/linkedin.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Email"
+        href="mailto:aadidevsooknanan@gmail.com"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/email.svg')"></div>
+      </a>
+    
+     
+</div>
+
+            <p>©2022 2022</p>
+          </footer>
+          </div>
+      </div>
+      
+    </div>
+    
+
+  </main>
+
+   
+
+  
+  <script src="/js/index.min.301a8b0870381bf76b3b5182e8966d363a0474281183439beb024d8b8228fc66.js" integrity="sha256-MBqLCHA4G/drO1GC6JZtNjoEdCgRg0Ob6wJNi4Io/GY=" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"
+    data-autoloader-path="https://unpkg.com/prismjs@1.20.0/components/"></script>
+
+  
+
+
+</body>
+
+</html>

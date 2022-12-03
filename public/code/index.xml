@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Codes on Aadis Blog</title>
+    <title>Codes on Aadi</title>
     <link>https://aadi-blogs.web.app/code/</link>
-    <description>Recent content in Codes on Aadis Blog</description>
+    <description>Recent content in Codes on Aadi</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 12 Sep 2022 06:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/code/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>©2022 {year}</copyright>
+    <lastBuildDate>Wed, 30 Nov 2022 00:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/code/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>TensorFlow Custom Loop</title>
+      <link>https://aadi-blogs.web.app/code/tf-loop/</link>
+      <pubDate>Wed, 30 Nov 2022 00:38:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/tf-loop/</guid>
+      <description>A pattern I use for pretty-progress bars, custom logging and metric-handling in tensorflow.
+&#39;&#39;&#39; This overviews the TensorFlow custom training loop in its (what I think is) most general sense. Four steps: 1. Define Model 2. Define Metrics, Optimizer and Losses 3. Define train and test (validation) functions 4. Write training loop &#39;&#39;&#39; import wandb import yaml import tensorflow as tf from tensorflow import keras from tensorflow.keras import layers import numpy as np import enlighten import logging import time from dataclasses import dataclass # STEP 0 - Set up datasets &#39;&#39;&#39; --------------------------------------------------------- STEP 1 - Define Model Define inputs, outputs and wrap using keras &#39;&#39;&#39; inputs = .</description>
+    </item>
+    
     <item>
       <title>Parsing XML with untangle</title>
       <link>https://aadi-blogs.web.app/code/untangle-xml/</link>
@@ -14,8 +25,8 @@
       
       <guid>https://aadi-blogs.web.app/code/untangle-xml/</guid>
       <description>Given XML:
-&amp;lt;?xml version=&amp;#34;1.0&amp;#34;?&amp;gt; &amp;lt;root&amp;gt; &amp;lt;child name=&amp;#34;child1&amp;#34;/&amp;gt; &amp;lt;/root&amp;gt; Python access
-import untangle doc = untangle.parse(&amp;#39;path/to/xml.xml&amp;#39;) # gives hierarchical access child_name = doc.root.child[&amp;#39;name&amp;#39;] # &amp;#39;child1&amp;#39; </description>
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt; &amp;lt;root&amp;gt; &amp;lt;child name=&amp;quot;child1&amp;quot;/&amp;gt; &amp;lt;/root&amp;gt; Python access
+import untangle doc = untangle.parse(&#39;path/to/xml.xml&#39;) # gives hierarchical access child_name = doc.root.child[&#39;name&#39;] # &#39;child1&#39; </description>
     </item>
     
     <item>
@@ -24,7 +35,7 @@ import untangle doc = untangle.parse(&amp;#39;path/to/xml.xml&amp;#39;) # gives 
       <pubDate>Sun, 24 Jul 2022 12:38:42 -0400</pubDate>
       
       <guid>https://aadi-blogs.web.app/code/sync-script/</guid>
-      <description>#!/usr/bin/zsh while getopts a: flag do case &amp;#34;${flag}&amp;#34; in a) remote=${OPTARG};; esac done echo &amp;#34;remote IP: $remote&amp;#34;; echo &amp;#34;write: $final&amp;#34;; home_dir=&amp;#34;/home/aadi/&amp;#34; storage_dir=&amp;#34;/storage/&amp;#34; # files in home HomeArray=( &amp;#34;.zshrc&amp;#34; ) if [[ $* == *--write* ]] then for arr in $HomeArray; do rsync -Pvtau $home_dir$arr aadi@$remote:$home_dir$arr done else for arr in $HomeArray; do rsync -Pvntau $home_dir$arr aadi@$remote:$home_dir$arr done fi # folders in home HomeArray=( &amp;#34;.config/alacritty&amp;#34; &amp;#34;.config/qtile&amp;#34; &amp;#34;.config/nvim&amp;#34; ) if [[ $* == *--write* ]] then for arr in $HomeArray; do rsync -Pvtau $home_dir$arr/ aadi@$remote:$home_dir$arr done else for arr in $HomeArray; do rsync -Pvntau $home_dir$arr/ aadi@$remote:$home_dir$arr done fi # files in storage SArray=( &amp;#34;reading&amp;#34; &amp;#34;research&amp;#34; ) if [[ $* == *--write* ]] then for arr in $SArray; do rsync -Pvtau $storage_dir$arr/ aadi@$remote:$home_dir$arr done else for arr in $SArray; do rsync -Pvntau $storage_dir$arr/ aadi@$remote:$home_dir$arr done fi </description>
+      <description>#!/usr/bin/zsh while getopts a: flag do case &amp;quot;${flag}&amp;quot; in a) remote=${OPTARG};; esac done echo &amp;quot;remote IP: $remote&amp;quot;; echo &amp;quot;write: $final&amp;quot;; home_dir=&amp;quot;/home/aadi/&amp;quot; storage_dir=&amp;quot;/storage/&amp;quot; # files in home HomeArray=( &amp;quot;.zshrc&amp;quot; ) if [[ $* == *--write* ]] then for arr in $HomeArray; do rsync -Pvtau $home_dir$arr aadi@$remote:$home_dir$arr done else for arr in $HomeArray; do rsync -Pvntau $home_dir$arr aadi@$remote:$home_dir$arr done fi # folders in home HomeArray=( &amp;quot;.config/alacritty&amp;quot; &amp;quot;.config/qtile&amp;quot; &amp;quot;.config/nvim&amp;quot; ) if [[ $* == *--write* ]] then for arr in $HomeArray; do rsync -Pvtau $home_dir$arr/ aadi@$remote:$home_dir$arr done else for arr in $HomeArray; do rsync -Pvntau $home_dir$arr/ aadi@$remote:$home_dir$arr done fi # files in storage SArray=( &amp;quot;reading&amp;quot; &amp;quot;research&amp;quot; ) if [[ $* == *--write* ]] then for arr in $SArray; do rsync -Pvtau $storage_dir$arr/ aadi@$remote:$home_dir$arr done else for arr in $SArray; do rsync -Pvntau $storage_dir$arr/ aadi@$remote:$home_dir$arr done fi </description>
     </item>
     
     <item>
@@ -33,7 +44,7 @@ import untangle doc = untangle.parse(&amp;#39;path/to/xml.xml&amp;#39;) # gives 
       <pubDate>Thu, 21 Jul 2022 06:38:42 -0400</pubDate>
       
       <guid>https://aadi-blogs.web.app/code/pyspark-fill-rate/</guid>
-      <description>import pyspark # missing values per column for k, v in sorted( table.agg(*[ (1 - (F.count(c) / F.count(&amp;#39;*&amp;#39;))) .alias(c + &amp;#39;_miss&amp;#39;) for c in table.columns]) .collect()[0] # retrieve all data to driver .asDict() # convert to python dictionary .items() # retrieve key-value pairs , key=lambda el: el[1] , reverse=True): print(k, v) </description>
+      <description>false</description>
     </item>
     
   </channel>

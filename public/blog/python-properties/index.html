@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>Encapsulation with Python Properties | Aadi</title>
+
+  <meta charset="UTF-8">
+  <meta name="language" content="en">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  
+  
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Encapsulation with Python Properties" />
+  <meta name="twitter:description" content=""/>
+  <meta name="twitter:site" content="@__aadiDev__" />
+  <meta name="twitter:creator" content="https://twitter.com/__aadiDev__" />
+  
+
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+
+
+  
+  
+    
+ 
+  
+  
+  
+  
+  
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/post.min.e698f6b3b067916a386cc08bdd04238ac76cc99155c3a0385cb5b85ea38beb30.css" integrity="sha256-5pj2s7BnkWo4bMCL3QQjisdsyZFVw6A4XLW4XqOL6zA="/>
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/custom.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" integrity="sha256-47DEQpj8HBSa&#43;/TImW&#43;5JCeuQeRkm5NMpJWZG3hSuFU="/>
+  
+  
+   
+   
+    
+
+<script type="application/ld+json">
+  
+    {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/aadi-blogs.web.app\/"
+      },
+      "articleSection" : "blog",
+      "name" : "Encapsulation with Python Properties",
+      "headline" : "Encapsulation with Python Properties",
+      "description" : "",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2022",
+      "datePublished": "2022-10-31 18:00:42 -0400 AST",
+      "dateModified" : "2022-10-31 18:00:42 -0400 AST",
+      "url" : "https:\/\/aadi-blogs.web.app\/blog\/python-properties\/",
+      "wordCount" : "799",
+      "keywords" : ["Blog"]
+    }
+  
+  </script>
+</head>
+
+<body>
+  <div class="burger__container">
+  <div class="burger" aria-controls="navigation" aria-label="Menu">
+    <div class="burger__meat burger__meat--1"></div>
+    <div class="burger__meat burger__meat--2"></div>
+    <div class="burger__meat burger__meat--3"></div>
+  </div>
+</div>
+ 
+
+  <nav class="nav" id="navigation">
+  <ul class="nav__list">
+    
+    
+      <li>
+        <a  href="/">about</a>
+      </li>
+    
+      <li>
+        <a  class="active"
+         href="/blog">blog</a>
+      </li>
+    
+      <li>
+        <a  href="/code">code</a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+  <main>
+    
+    
+
+    <div class="flex-wrapper">
+      <div class="post__container">
+        <div class="post">
+          <header class="post__header">
+            <h1 id="post__title">Encapsulation with Python Properties</h1>
+            <time datetime="2022-10-31 18:00:42 -0400 AST" class="post__date">Oct 31 2022</time> 
+          </header>
+          <article class="post__content">
+              
+<p>If you ever created a class in Python, you probably accessed it using dot notation (i.e. <code>instance_name.attribute_name</code>).</p>
+<p>That&rsquo;s python&rsquo;s way of calling <code>getattr</code> by means of an alias:</p>
+<pre><code class="language-python">class A:
+    var = 10
+    pass
+
+a = A()
+# this is how Python accesses attributes
+getattr(a, 'var')
+</code></pre>
+<pre><code>10
+</code></pre>
+<pre><code class="language-python">a.__getattribute__('var') # above is an alias for this
+</code></pre>
+<pre><code>10
+</code></pre>
+<p>The most &ldquo;pythonic&rdquo; way of getting and setting attributes is using dot notation:</p>
+<pre><code class="language-python">A.var = 11
+print(A.var)
+</code></pre>
+<pre><code>11
+</code></pre>
+<p>which is short for the dunder <code>getattribute</code> method</p>
+<p>However, if you&rsquo;re familiar with any other languagee, you&rsquo;d immediately think of &ldquo;getter&rdquo; and &ldquo;setter&rdquo; methods. Here&rsquo;s an example from Java:</p>
+<pre><code class="language-java">public class Airplane {
+  private String flightNumber; // private = restricted access
+
+  // Getter
+  public String getFlightNumber() {
+    return flightNumber;
+  }
+
+  // Setter
+  public void setFlightNumber(String newNumber) {
+    this.flightNumber = newNumber;
+  }
+}
+</code></pre>
+<p>Why is this important? Because of <em>encapsulation</em>. The entire idea behind this is to ensure &ldquo;sensitive&rdquo; data is not directly accessible by end users. Although the example above is quite trivial, these setter and getter methods may contain validation for inputs, as well as check for (e.g.) the existence of an authentication key prior to returning a value.</p>
+<p>And I just wasn&rsquo;t satisfied with vanilla dot-notation in Python.</p>
+<h1 id="property-to-the-rescue">property to the rescue!</h1>
+<p>Python 2 introduced property, which facilitates the management of class attributes.</p>
+<p>It&rsquo;s signature is as follows:</p>
+<pre><code class="language-python">property(fget=None, fset=None, fdel=None, doc=None)
+</code></pre>
+<p><code>fget</code> is the &ldquo;getter&rdquo; function, <code>fset</code> is the &ldquo;setter&rdquo; function, <code>fdel</code> is the deleter and <code>doc</code> specifies a custom docstring (similar to what you&rsquo;d see in <code>namedtuple</code>).</p>
+<p>When <code>fset</code> is not defined, the attribute becomes read-only:</p>
+<pre><code class="language-python"># using property
+class MyClass:
+    def __init__(self, ):
+        self.__var = 'some value' 
+
+    def get_var(self,):
+        print('get_var run')
+        return self.__var
+
+    var = property(get_var,)
+</code></pre>
+<pre><code class="language-python">my_instance = MyClass() 
+my_instance.var # this runs
+</code></pre>
+<pre><code>get_var run
+
+'some value'
+</code></pre>
+<pre><code class="language-python">my_instance.var = 'some other value' # this does not!
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+/storage/projects/notes/metaprogramming/properties.ipynb Cell 12 in &lt;module&gt;
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X33sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt; my_instance.var = 'some other value'
+
+
+AttributeError: can't set attribute
+</code></pre>
+<p>To make it set-able, we need to define a &ldquo;setter&rdquo;:</p>
+<pre><code class="language-python">class MyClass:
+    def __init__(self, var):
+        self.__var = var
+
+    def get_var(self, ):
+        return self.__var
+
+    def set_var(self, var):
+        self.__var = var
+
+    var = property(get_var, set_var)
+</code></pre>
+<pre><code class="language-python">my_instance = MyClass(var=10)
+my_instance.var # this works
+my_instance.var = 11 # so does this!
+</code></pre>
+<p><code>set_var</code> is run <em>even in the constructor</em>, showing that the last line <code>property(get_var, set_var)</code> run</p>
+<p>Some syntactic sugar!</p>
+<pre><code class="language-python">class MyClass:
+    def __init__(self, var):
+        self.var = var
+
+    @property
+    def var(self):
+        print('getter run')
+        return self.__var
+
+    @var.setter
+    def var(self, var):
+        print('setter run')
+        self.__var = var
+
+my_instance = MyClass(var=11)
+</code></pre>
+<pre><code>setter run
+</code></pre>
+<pre><code class="language-python">my_instance.var # here the getter is run
+</code></pre>
+<pre><code>getter run
+
+11
+</code></pre>
+<p>The beauty of the above is that I can do validation on the inputs, for example if I have a <code>Person</code> class:</p>
+<pre><code class="language-python">class Person:
+    def __init__(self, name, age):
+        self.__name = name
+        self.__age = age
+
+    @property
+    def age(self, ):
+        return self.__age
+
+    @age.setter
+    def age(self, age):
+        if age &lt; 0:
+            raise ValueError('Age must be non-negative')
+        self.__age = age
+
+a_person = Person(name='Skywalker', age=11)
+a_person.age # this works
+</code></pre>
+<pre><code>11
+</code></pre>
+<pre><code class="language-python"># we get validation whilst maintaining Pythonic dot-notation!
+a_person.age = -1 
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+/storage/projects/notes/metaprogramming/properties.ipynb Cell 22 in &lt;module&gt;
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X43sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt; a_person.age = -1
+
+
+/storage/projects/notes/metaprogramming/properties.ipynb Cell 22 in Person.age(self, age)
+     &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X43sZmlsZQ%3D%3D?line=9'&gt;10&lt;/a&gt; @age.setter
+     &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X43sZmlsZQ%3D%3D?line=10'&gt;11&lt;/a&gt; def age(self, age):
+     &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X43sZmlsZQ%3D%3D?line=11'&gt;12&lt;/a&gt;     if age &lt; 0:
+---&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X43sZmlsZQ%3D%3D?line=12'&gt;13&lt;/a&gt;         raise ValueError('Age must be non-negative')
+     &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X43sZmlsZQ%3D%3D?line=13'&gt;14&lt;/a&gt;     self.__age = age
+
+
+ValueError: Age must be non-negative
+</code></pre>
+<h1 id="a-property-factory">A <code>property</code> factory</h1>
+<p>Using the logic above, we can build our own &ldquo;factory&rdquo; for properties. For example, let&rsquo;s say we have a bunch of attributes that need be validated with a common validation (let&rsquo;s say they all need to be of a given length and start with the pattern &lsquo;0x&rsquo;)</p>
+<pre><code class="language-python">def quantity(storage_name):
+    def _getter(instance):
+        return instance.__dict__[storage_name]
+
+    def _setter(instance, value):
+        if len(value) != 10:
+            raise ValueError('value must be of length 10') 
+        if not value.startswith('0x'):
+            raise ValueError('value must start with 0x')
+        instance.__dict__[storage_name] = value
+
+    return property(_getter, _setter)
+
+class MyClass:
+    a = quantity('a')
+
+    def __init__(self, a):
+        self.a = a
+</code></pre>
+<pre><code class="language-python">my_instance = MyClass(a='0x00000000')
+</code></pre>
+<pre><code class="language-python">my_instance.a
+</code></pre>
+<pre><code>'0x00000000'
+</code></pre>
+<pre><code class="language-python">my_instance.a = '0x3' # neither of these work
+my_instance.a = '0000000000'
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+/storage/projects/notes/metaprogramming/properties.ipynb Cell 27 in &lt;module&gt;
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X13sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt; # my_instance.a = '0x3' # neither of these work
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X13sZmlsZQ%3D%3D?line=1'&gt;2&lt;/a&gt; my_instance.a = '0000000000'
+
+
+/storage/projects/notes/metaprogramming/properties.ipynb Cell 27 in quantity.&lt;locals&gt;._setter(instance, value)
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X13sZmlsZQ%3D%3D?line=6'&gt;7&lt;/a&gt;     raise ValueError('value must be of length 10') 
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X13sZmlsZQ%3D%3D?line=7'&gt;8&lt;/a&gt; if not value.startswith('0x'):
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X13sZmlsZQ%3D%3D?line=8'&gt;9&lt;/a&gt;     raise ValueError('value must start with 0x')
+     &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/properties.ipynb#X13sZmlsZQ%3D%3D?line=9'&gt;10&lt;/a&gt; instance.__dict__[storage_name] = value
+
+
+ValueError: value must start with 0x
+</code></pre>
+<p>The above was a short, admittedly convoluted example of what you get do with getters/setters in Python, however I think that the point is clear: if we wish to maintain the Pythonic pattern of dot-notations whilst doubly adhering to the rules of encapsuation, <code>property</code> greatly assists in our ability to manage class attributes</p>
+
+
+              
+          </article>
+          
+
+ <div class="pagination">
+  
+    <a class="pagination__item" href="https://aadi-blogs.web.app/blog/using-decorators-to-solve-data-cleaning/">
+        <span class="pagination__label">Previous Post</span>
+        <span class="pagination__title">Using Decorators to Solve Date Problems</span>
+    </a>
+  
+
+  
+    <a class="pagination__item" href="https://aadi-blogs.web.app/blog/metaprogramming-in-data-science/">
+      <span class="pagination__label">Next Post</span>
+      <span class="pagination__title" >Managed Attributes in Python</span>
+    </a>
+  
+</div>
+
+          
+          <footer class="post__footer">
+            
+
+
+<div class="social-icons">
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Twitter"
+        href="https://twitter.com/__aadiDev__"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/twitter.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="GitHub"
+        href="https://github.com/aadi350"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/github.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="LinkedIn"
+        href="https://www.linkedin.com/in/aadidev-sooknanan/"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/linkedin.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Email"
+        href="mailto:aadidevsooknanan@gmail.com"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/email.svg')"></div>
+      </a>
+    
+     
+</div>
+
+            <p>©2022 2022</p>
+          </footer>
+          </div>
+      </div>
+      
+    </div>
+    
+
+  </main>
+
+   
+
+  
+  <script src="/js/index.min.301a8b0870381bf76b3b5182e8966d363a0474281183439beb024d8b8228fc66.js" integrity="sha256-MBqLCHA4G/drO1GC6JZtNjoEdCgRg0Ob6wJNi4Io/GY=" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"
+    data-autoloader-path="https://unpkg.com/prismjs@1.20.0/components/"></script>
+
+  
+
+
+</body>
+
+</html>

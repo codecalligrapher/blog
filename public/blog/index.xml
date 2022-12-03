@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Blogs on Aadis Blog</title>
+    <title>Blogs on Aadi</title>
     <link>https://aadi-blogs.web.app/blog/</link>
-    <description>Recent content in Blogs on Aadis Blog</description>
+    <description>Recent content in Blogs on Aadi</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 23 Oct 2022 22:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>©2022 {year}</copyright>
+    <lastBuildDate>Wed, 09 Nov 2022 12:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Enforcing Function Implementation in Subclasses</title>
+      <link>https://aadi-blogs.web.app/blog/enforce-override/</link>
+      <pubDate>Wed, 09 Nov 2022 12:38:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/enforce-override/</guid>
+      <description>This is going to get very weird, very quickly. When you create a class in Python, it looks about like the following:
+class MyClass: pass Now, let&amp;rsquo;s say I create some really cool class, with a set of cool functions, but I expect my users to implement some of the functions:
+from abc import abstractmethod class BaseClass: @abstractmethod def foo(self,): raise NotImplementedError So the intention is, when my user inherits the above class, they do the following:</description>
+    </item>
+    
+    <item>
+      <title>Managed Attributes in Python</title>
+      <link>https://aadi-blogs.web.app/blog/metaprogramming-in-data-science/</link>
+      <pubDate>Sat, 05 Nov 2022 00:38:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/metaprogramming-in-data-science/</guid>
+      <description>In a previous post, I detailed how to maintain encapsulation using Python&amp;rsquo;s property. In this piece, I go through how/why to manage and apply validation to class attributes in an object-oriented fashion by means of a fairly plausible example.
+A type is the parent class of class, therefore any class is actually a sub-type of type. The following are equivalent:
+a = int(8) a = 8 type(a) # python knows to create an int without being explicit int The point of implementing custom attribute types is (in my case), for validation.</description>
+    </item>
+    
+    <item>
+      <title>Encapsulation with Python Properties</title>
+      <link>https://aadi-blogs.web.app/blog/python-properties/</link>
+      <pubDate>Mon, 31 Oct 2022 18:00:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/python-properties/</guid>
+      <description>If you ever created a class in Python, you probably accessed it using dot notation (i.e. instance_name.attribute_name).
+That&amp;rsquo;s python&amp;rsquo;s way of calling getattr by means of an alias:
+class A: var = 10 pass a = A() # this is how Python accesses attributes getattr(a, &#39;var&#39;) 10 a.__getattribute__(&#39;var&#39;) # above is an alias for this 10 The most &amp;ldquo;pythonic&amp;rdquo; way of getting and setting attributes is using dot notation:
+A.var = 11 print(A.</description>
+    </item>
+    
     <item>
       <title>Using Decorators to Solve Date Problems</title>
       <link>https://aadi-blogs.web.app/blog/using-decorators-to-solve-data-cleaning/</link>

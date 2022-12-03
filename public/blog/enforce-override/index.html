@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>Enforcing Function Implementation in Subclasses | Aadi</title>
+
+  <meta charset="UTF-8">
+  <meta name="language" content="en">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  
+  
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Enforcing Function Implementation in Subclasses" />
+  <meta name="twitter:description" content=""/>
+  <meta name="twitter:site" content="@__aadiDev__" />
+  <meta name="twitter:creator" content="https://twitter.com/__aadiDev__" />
+  
+
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+
+
+  
+  
+    
+ 
+  
+  
+  
+  
+  
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/post.min.e698f6b3b067916a386cc08bdd04238ac76cc99155c3a0385cb5b85ea38beb30.css" integrity="sha256-5pj2s7BnkWo4bMCL3QQjisdsyZFVw6A4XLW4XqOL6zA="/>
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/custom.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" integrity="sha256-47DEQpj8HBSa&#43;/TImW&#43;5JCeuQeRkm5NMpJWZG3hSuFU="/>
+  
+  
+   
+   
+    
+
+<script type="application/ld+json">
+  
+    {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/aadi-blogs.web.app\/"
+      },
+      "articleSection" : "blog",
+      "name" : "Enforcing Function Implementation in Subclasses",
+      "headline" : "Enforcing Function Implementation in Subclasses",
+      "description" : "",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2022",
+      "datePublished": "2022-11-09 12:38:42 -0400 AST",
+      "dateModified" : "2022-11-09 12:38:42 -0400 AST",
+      "url" : "https:\/\/aadi-blogs.web.app\/blog\/enforce-override\/",
+      "wordCount" : "764",
+      "keywords" : ["Blog"]
+    }
+  
+  </script>
+</head>
+
+<body>
+  <div class="burger__container">
+  <div class="burger" aria-controls="navigation" aria-label="Menu">
+    <div class="burger__meat burger__meat--1"></div>
+    <div class="burger__meat burger__meat--2"></div>
+    <div class="burger__meat burger__meat--3"></div>
+  </div>
+</div>
+ 
+
+  <nav class="nav" id="navigation">
+  <ul class="nav__list">
+    
+    
+      <li>
+        <a  href="/">about</a>
+      </li>
+    
+      <li>
+        <a  class="active"
+         href="/blog">blog</a>
+      </li>
+    
+      <li>
+        <a  href="/code">code</a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+  <main>
+    
+    
+
+    <div class="flex-wrapper">
+      <div class="post__container">
+        <div class="post">
+          <header class="post__header">
+            <h1 id="post__title">Enforcing Function Implementation in Subclasses</h1>
+            <time datetime="2022-11-09 12:38:42 -0400 AST" class="post__date">Nov 9 2022</time> 
+          </header>
+          <article class="post__content">
+              
+<p>This is going to get very weird, very quickly. When you create a class in Python, it looks about like the following:</p>
+<pre><code class="language-python">class MyClass:
+    pass
+</code></pre>
+<p>Now, let&rsquo;s say I create some really cool class, with a set of cool functions, but I expect my users to implement some of the functions:</p>
+<pre><code class="language-python">from abc import abstractmethod
+
+class BaseClass:
+    @abstractmethod
+    def foo(self,):
+        raise NotImplementedError
+</code></pre>
+<p>So the intention is, when my user inherits the above class, they do the following:</p>
+<pre><code class="language-python">class UserClass(BaseClass):
+    def foo(self, *args, **kwargs):
+        # actual functionality
+        pass
+</code></pre>
+<p>That&rsquo;s all well and good, but what happens if my user <em>forgets</em> to implement <code>foo</code>? The above ran just fine, and even instantiation works!</p>
+<pre><code class="language-python">class BaseClass:
+    @abstractmethod
+    def foo(self,):
+        raise NotImplementedError
+
+class UserClass(BaseClass):
+    pass
+
+user_instance = UserClass()
+</code></pre>
+<p>Now, this is a problem. Suppose this class were deployed to some production system, which attempts to call <code>foo</code>&hellip;</p>
+<pre><code class="language-python">user_instance.foo()
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+NotImplementedError                       Traceback (most recent call last)
+
+/storage/projects/notes/metaprogramming/metaclasses.ipynb Cell 72 in &lt;cell line: 1&gt;()
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y141sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt; user_instance.foo()
+
+
+/storage/projects/notes/metaprogramming/metaclasses.ipynb Cell 72 in BaseClass.foo(self)
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y141sZmlsZQ%3D%3D?line=1'&gt;2&lt;/a&gt; @abstractmethod
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y141sZmlsZQ%3D%3D?line=2'&gt;3&lt;/a&gt; def foo(self,):
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y141sZmlsZQ%3D%3D?line=3'&gt;4&lt;/a&gt;     raise NotImplementedError
+
+
+NotImplementedError: 
+</code></pre>
+<p>That&rsquo;s a problem! Any code that will fail should fail <em>at compile time</em>, NOT only after it&rsquo;s deployed. So how do you ensure that, given you write a class, users of your class actually implement the function?</p>
+<h2 id="pep-487">PEP 487<a class="anchor" href="#pep-487">#</a></h2>
+<p>Enter PEP 487: this PEP proposed a hook (Python&rsquo;s runtime is quite rich, an a hook is a concrete method in an abstract class that can be overridden by subclasses) for easing the customization of class creation:</p>
+<pre><code class="language-python">from dis import dis
+
+class Base:
+    def __init_subclass__(cls, **kwargs):
+        print('__init_subclass__ run', cls)
+
+        super().__init_subclass__(**kwargs)
+
+class MyClass(Base):
+    def __init__(self, ):
+        return 
+</code></pre>
+<pre><code>__init_subclass__ run &lt;class '__main__.MyClass'&gt;
+</code></pre>
+<p>From the above, we can see the <code>__init_subclass__</code> is run <em>at time of class creation</em>. This is going to be useful to check for whether or not a user overrides my abstract function.</p>
+<p>So let&rsquo;s try this again, in the <code>__init_subclass__</code>, we check whether or not the method <code>foo</code> is still abstract or not. In this case, methods decorated with <code>@abstractmethod</code> have an attribute <code>__isabstractmethod__</code> which can be pulled:</p>
+<pre><code class="language-python">class BaseClass: # this is the class I would write
+    def __init_subclass__(cls, **kwargs):
+        # if attribute foo of the class cls is still abstract, raise an error
+        if getattr(cls().foo, '__isabstractmethod__', False): 
+            raise NotImplementedError('Function foo must be implemented')
+
+        super().__init_subclass__(**kwargs)
+
+    @abstractmethod
+    def foo(self, ):
+        raise NotImplementedError
+</code></pre>
+<p>Now if the above was set up correctly, any classes inheriting from <code>BaseClass</code> should fail to be created at all at time of <strong>class</strong> creation, NOT instance creation!</p>
+<pre><code class="language-python">class MyGoodUserClass(BaseClass):
+    def foo(self, x):
+        return x**2
+
+user_instance = MyGoodUserClass()
+user_instance.foo(x=3)
+</code></pre>
+<pre><code>9
+</code></pre>
+<p>The above works fine, the method <code>foo</code> was successfully overridden and implemented; but the best-case scenario is fairly uninteresting. What happens when a user <em>forgets</em> to implement/override <code>foo</code>?</p>
+<pre><code class="language-python">class MyBadUserClass(BaseClass):
+    pass
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+NotImplementedError                       Traceback (most recent call last)
+
+/storage/projects/notes/metaprogramming/metaclasses.ipynb Cell 80 in &lt;cell line: 1&gt;()
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y154sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt; class MyBadUserClass(BaseClass):
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y154sZmlsZQ%3D%3D?line=1'&gt;2&lt;/a&gt;     pass
+
+
+/storage/projects/notes/metaprogramming/metaclasses.ipynb Cell 80 in BaseClass.__init_subclass__(cls, **kwargs)
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y154sZmlsZQ%3D%3D?line=1'&gt;2&lt;/a&gt; def __init_subclass__(cls, **kwargs):
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y154sZmlsZQ%3D%3D?line=2'&gt;3&lt;/a&gt;     # if attribute foo of the class cls is still abstract, raise an error
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y154sZmlsZQ%3D%3D?line=3'&gt;4&lt;/a&gt;     if getattr(cls().foo, '__isabstractmethod__', False): 
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y154sZmlsZQ%3D%3D?line=4'&gt;5&lt;/a&gt;         raise NotImplementedError('Function foo must be implemented')
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y154sZmlsZQ%3D%3D?line=6'&gt;7&lt;/a&gt;     super().__init_subclass__(**kwargs)
+
+
+NotImplementedError: Function foo must be implemented
+</code></pre>
+<p>That&rsquo;s right, <strong>class</strong> creation fails up-front, exactly where it&rsquo;s supposed to fail!</p>
+<h2 id="an-actual-example">An Actual Example<a class="anchor" href="#an-actual-example">#</a></h2>
+<p>Okay that was quite meta (pun intended), let&rsquo;s see an example; Let&rsquo;s say, I have a parent class that does data transformations, but I expect the user to implement their own cost function, so the function should take two inputs and return the similarity between them:</p>
+<pre><code class="language-python">import math
+from abc import abstractmethod
+
+class TransformData:
+    def __init_subclass__(cls, **kwargs):
+        if getattr(cls().cost , '__isabstractmethod__', False):
+            raise NotImplementedError('Implement cost function!')
+
+        super().__init_subclass__(**kwargs)
+
+    # assume some useful functions here
+    def exponent(self, x):
+        return math.exp(x) 
+
+    def factorial(self, x):
+        return math.factorial(x)
+    
+    @abstractmethod
+    def cost(self, a, b):
+        raise NotImplementedError
+
+</code></pre>
+<p>Now, my user, by means of subclassing <code>TransformData</code>, must implement their own cost function. If they don&rsquo;t:</p>
+<pre><code class="language-python">class UserTransforms(TransformData):
+    pass
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+NotImplementedError                       Traceback (most recent call last)
+
+/storage/projects/notes/metaprogramming/metaclasses.ipynb Cell 85 in &lt;cell line: 1&gt;()
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y161sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt; class UserTransforms(TransformData):
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y161sZmlsZQ%3D%3D?line=1'&gt;2&lt;/a&gt;     pass
+
+
+/storage/projects/notes/metaprogramming/metaclasses.ipynb Cell 85 in TransformData.__init_subclass__(cls, **kwargs)
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y161sZmlsZQ%3D%3D?line=4'&gt;5&lt;/a&gt; def __init_subclass__(cls, **kwargs):
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y161sZmlsZQ%3D%3D?line=5'&gt;6&lt;/a&gt;     if getattr(cls().cost , '__isabstractmethod__', False):
+----&gt; &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y161sZmlsZQ%3D%3D?line=6'&gt;7&lt;/a&gt;         raise NotImplementedError('Implement cost function!')
+      &lt;a href='vscode-notebook-cell:/storage/projects/notes/metaprogramming/metaclasses.ipynb#Y161sZmlsZQ%3D%3D?line=8'&gt;9&lt;/a&gt;     super().__init_subclass__(**kwargs)
+
+
+NotImplementedError: Implement cost function!
+</code></pre>
+<p>And if they do:</p>
+<pre><code class="language-python">class UserTransforms(TransformData):
+    def cost(self, a, b):
+        return a - b 
+</code></pre>
+<p>It goes without saying, this is for sake of example, and not <em>every</em> abstract method need necessarily be implemented. This is for mission-critical functionality where the entire purpose of the class is negated without implementation.</p>
+
+
+              
+          </article>
+          
+
+<ul class="tags__list">
+    
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/metaprogramming/">metaprogramming</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/python/">python</a>
+    </li></ul>
+
+ <div class="pagination">
+  
+    <a class="pagination__item" href="https://aadi-blogs.web.app/blog/metaprogramming-in-data-science/">
+        <span class="pagination__label">Previous Post</span>
+        <span class="pagination__title">Managed Attributes in Python</span>
+    </a>
+  
+
+  
+</div>
+
+          
+          <footer class="post__footer">
+            
+
+
+<div class="social-icons">
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Twitter"
+        href="https://twitter.com/__aadiDev__"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/twitter.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="GitHub"
+        href="https://github.com/aadi350"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/github.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="LinkedIn"
+        href="https://www.linkedin.com/in/aadidev-sooknanan/"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/linkedin.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Email"
+        href="mailto:aadidevsooknanan@gmail.com"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/email.svg')"></div>
+      </a>
+    
+     
+</div>
+
+            <p>©2022 2022</p>
+          </footer>
+          </div>
+      </div>
+      
+      <div class="toc-container">
+          
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#pep-487">PEP 487</a></li>
+    <li><a href="#an-actual-example">An Actual Example</a></li>
+  </ul>
+</nav>
+      </div>
+      
+    </div>
+    
+
+  </main>
+
+   
+
+  
+  <script src="/js/index.min.301a8b0870381bf76b3b5182e8966d363a0474281183439beb024d8b8228fc66.js" integrity="sha256-MBqLCHA4G/drO1GC6JZtNjoEdCgRg0Ob6wJNi4Io/GY=" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"
+    data-autoloader-path="https://unpkg.com/prismjs@1.20.0/components/"></script>
+
+  
+    <script src="/js/table-of-contents.js"></script>
+  
+
+
+</body>
+
+</html>

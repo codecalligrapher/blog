@@ -1,0 +1,66 @@
+baseURL = 'https://aadi-blogs.web.app/'
+languageCode = 'en-us'
+title = 'Aadis Blog'
+theme = 'hugo-PaperMod'
+
+[menu]
+[[menu.main]]
+  identifier = 'blog'
+  name = 'blogs'
+  pre = "<i class='fa fa-heart'></i>"
+  url = '/blog/'
+  weight = -110
+  [menu.main.params]
+    class = 'highlight-menu-item'
+
+[[menu.main]]
+  identifier = 'code'
+  name = 'code'
+  pre = "<i class='fa fa-heart'></i>"
+  url = '/code/'
+  weight = -110
+  [menu.main.params]
+    class = 'highlight-menu-item'
+
+[social]
+    twitter = "https://twitter.com/cats"
+    github = "https://github.com/cats"
+
+[params]
+defaultTheme = 'dark'
+showShareButtons = 'true'
+showReadingTime = 'true'
+showBreadCrumbs = 'true'
+showPostNavLinks = 'true'
+
+[params.cover]
+linkFullImages = 'true'
+
+[params.homeInfoParams]
+Title = 'Hi, my name is Aadidev'
+Content = "I'm a data scientist who's worked on million-dollar projects, put machine-learning models into production and contributed to deep learning research"
+
+
+[params.profileMode]
+enabled = 'true'
+Title = 'Hi, my name is Aadidev'
+Subtitle = "I'm a data scientist who's worked on million-dollar projects, put machine-learning models into production and contributed to deep learning research"
+ImageURL = 'https://i.imgur.com/eVM8UZx.png'
+
+
+[[params.socialIcons]]
+name = 'github'
+url = "https://github.com/aadi350"
+
+[[params.socialIcons]]
+name = 'email'
+url = 'mailto:aadidev.sooknanan@gmail.com'
+
+[[params.socialIcons]]
+name = 'linkedin'
+url = 'https://www.linkedin.com/in/aadidev-sooknanan/'
+
+[[params.socialIcons]]
+name = 'twitter'
+url = 'https://twitter.com/__aadiDev__/'
+

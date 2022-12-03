@@ -2,9 +2,6 @@
 title: "Zero-Padding a CSV with AWK"
 date: 2022-08-26T00:00:00-00:00
 math: true
-cover: 
-    image: "blog/covers/awk_zero_pad.png"
-    relative: true
 ---
 This was purely out of sheer need, and this was the fastest way I could've gotten it done (I ended up learning a LOT about CLI and the `awk` command from this, so I'm really grateful for that)
 

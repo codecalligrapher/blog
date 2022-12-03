@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>Managed Attributes in Python | Aadi</title>
+
+  <meta charset="UTF-8">
+  <meta name="language" content="en">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  
+  
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Managed Attributes in Python" />
+  <meta name="twitter:description" content=""/>
+  <meta name="twitter:site" content="@__aadiDev__" />
+  <meta name="twitter:creator" content="https://twitter.com/__aadiDev__" />
+  
+
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+
+
+  
+  
+    
+ 
+  
+  
+  
+  
+  
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/post.min.e698f6b3b067916a386cc08bdd04238ac76cc99155c3a0385cb5b85ea38beb30.css" integrity="sha256-5pj2s7BnkWo4bMCL3QQjisdsyZFVw6A4XLW4XqOL6zA="/>
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/custom.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" integrity="sha256-47DEQpj8HBSa&#43;/TImW&#43;5JCeuQeRkm5NMpJWZG3hSuFU="/>
+  
+  
+   
+   
+    
+
+<script type="application/ld+json">
+  
+    {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/aadi-blogs.web.app\/"
+      },
+      "articleSection" : "blog",
+      "name" : "Managed Attributes in Python",
+      "headline" : "Managed Attributes in Python",
+      "description" : "",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2022",
+      "datePublished": "2022-11-05 00:38:42 -0400 AST",
+      "dateModified" : "2022-11-05 00:38:42 -0400 AST",
+      "url" : "https:\/\/aadi-blogs.web.app\/blog\/metaprogramming-in-data-science\/",
+      "wordCount" : "1036",
+      "keywords" : ["Blog"]
+    }
+  
+  </script>
+</head>
+
+<body>
+  <div class="burger__container">
+  <div class="burger" aria-controls="navigation" aria-label="Menu">
+    <div class="burger__meat burger__meat--1"></div>
+    <div class="burger__meat burger__meat--2"></div>
+    <div class="burger__meat burger__meat--3"></div>
+  </div>
+</div>
+ 
+
+  <nav class="nav" id="navigation">
+  <ul class="nav__list">
+    
+    
+      <li>
+        <a  href="/">about</a>
+      </li>
+    
+      <li>
+        <a  class="active"
+         href="/blog">blog</a>
+      </li>
+    
+      <li>
+        <a  href="/code">code</a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+  <main>
+    
+    
+
+    <div class="flex-wrapper">
+      <div class="post__container">
+        <div class="post">
+          <header class="post__header">
+            <h1 id="post__title">Managed Attributes in Python</h1>
+            <time datetime="2022-11-05 00:38:42 -0400 AST" class="post__date">Nov 5 2022</time> 
+          </header>
+          <article class="post__content">
+              
+<p>In <a href="https://aadi-blogs.web.app/blog/python-properties/" 
+  
+   target="_blank" rel="noreferrer noopener" 
+>a previous post</a>, I detailed how to maintain encapsulation using Python&rsquo;s <code>property</code>. In this piece, I go through how/why to manage and apply validation to class attributes in an object-oriented fashion by means of a fairly plausible example.</p>
+<p>A <code>type</code> is the parent class of <code>class</code>, therefore any <code>class</code> is actually a sub-type of <code>type</code>. The following are equivalent:</p>
+<pre><code class="language-python">a = int(8)
+a = 8
+type(a) # python knows to create an int without being explicit
+</code></pre>
+<pre><code class="language-bash">    int
+
+</code></pre>
+<p>The point of implementing custom attribute <em>types</em> is (in my case), for validation. The general pattern for creating a class that serves as a <code>type</code> to validate instance attributes is as follows (for a descriptor):</p>
+<pre><code class="language-python">class Descriptor:
+    attribute_name: str # This stores the name of the attribute
+    def __init__(self, attribute_name):
+        self.attribute_name = attribute_name 
+
+    def __set__(self, instance, value):
+        '''
+            E.g of what NOT to do, show what happens if I do
+                self.__dict__[self.attribute_name] = value
+            this modifies the class attribute for ALL Descriptor classes!
+        '''
+        if value &lt; 0:
+            raise ValueError
+        instance.__dict__[self.attribute_name] = value
+
+</code></pre>
+<p>In the <code>__set__</code> magic method, <code>self</code> is the descriptor instance (the class <code>Descriptor</code> above), instance is the <em>managed</em> instance, and value is what we set the managed instance to. Descriptors store values of managed instances. It is in the class above that I could implement any validation on the values of the inputs, etc.</p>
+<p>If I wanted to use the above in a class (named <code>ManagedClass</code> for extreme explicitness), I create a class attribute (named <code>attr</code> again) of type <code>Descriptor</code>:</p>
+<pre><code class="language-python">class ManagedClass:
+    attr = Descriptor('attr')
+
+    def __init__(self, attr):
+        self.attr = attr
+
+</code></pre>
+<p>Why is this useful? Firstly, it maintains encapsulation, the class implementing any functionality does not also have to handle its validation of attributes <strong>and</strong> if the validation pattern changes, I don&rsquo;t have to update every single class.</p>
+<h1 id="without-repeating-the-name">Without Repeating the Name</h1>
+<p>That&rsquo;s useful, but it&rsquo;s a bit annoying to type <code>attr=Description('attr')</code> and repeat <code>attr</code> over and over. Credit to Luciano Ramalho in the book Fluent Python for the following solution to this:</p>
+<pre><code class="language-python">class Quantity:
+    __numinstance = 0 # class attribute across ALL instances
+
+    def __init__(self, ):
+        cls = self.__class__ # cls refers to the Quantity class
+        prefix = cls.__name__
+        index = cls.__numinstance
+
+        self.attr_name = f'_{prefix}#{index}' # unique!
+        cls.__numinstance += 1 
+
+    def __get__(self, instance, owner):
+        return getattr(instance, self.attr_name) 
+        # need to implement this because name of managed attribute is NOT the same as the attr_name
+        # getattr used here bc names are different, will not trigger infinite loop
+
+    def __set__(self, instance, value):
+        setattr(instance, self.attr_name, value)
+
+</code></pre>
+<p>In the above, the class of the Descriptor/Quantity, etc manages a counter called <code>__numinstance</code> which generates a unique <code>attr_name</code> for every instance automatically. This way, creating a new instance does not require to pass in the name of the instance explicitly and there is no risk of index-collisions.</p>
+<pre><code class="language-python">class ManagedClass:
+    attr_name = Quantity() # this works!
+</code></pre>
+<h1 id="why-this-is-useful">Why this is useful</h1>
+<p>This seems like a bunch of additional complexity for little to no benefit, but I&rsquo;d argue for the exact opposite. Firstly (and most importantly), <em>users</em> of your code don&rsquo;t need to care about the internals of attribute validation, all they need to care about is the qualit of the error messages that may arise if they happen to input a value that does not match the validation.</p>
+<p>For example, let&rsquo;s create a <code>Validated</code> class for validating hyper-parameters for model-training:</p>
+<pre><code class="language-python"># create a Validated abstract class
+import abc
+
+# parent class Validated
+class Validated(abc.ABC, Quantity):
+    def __set__(self, instance, value):
+        value = self.validate(instance, value)
+        super().__set__(instance, value) # THIS performans the actual storage, in this case the set method in Quantity
+
+    @abc.abstractmethod
+    def validate(self, instance, value):
+        '''Allows subclasses to implement their own validation'''
+
+
+
+</code></pre>
+<p>Let&rsquo;s also create two subclasses called <code>ValidateLearningRate</code> and <code>ValidatedKernelSize</code>. (For anyone familiar with Neural-Network parameters, you&rsquo;d know that learning rate is typically between 0 and 1, and Kernel size is usually an odd number greater than 2, this varies but ConvNets use 3 or 5-sized kernels).</p>
+<pre><code class="language-python">class ValidateLearningRate(Validated):
+    '''no numbers outsize 0 to 1'''
+    def validate(self, instance, value):
+        if value &lt; 0 or value &gt; 1:
+            raise ValueError('LearningRate must be &gt; 0 and &lt;= 1')
+        return value
+
+class ValidateKernelSize(Validated):
+    '''No non-integers'''
+    def validate(self, instance, value):
+        if not isinstance(value, int):
+            raise ValueError('Must be positive integer')
+        if value % 2 != 1:
+            raise ValueError('Value must be an odd integer')
+
+        return value
+
+</code></pre>
+<p>Now, I create my class that is managed by the subclassed attributes above, which is the <strong>only</strong> class that my end-users interact with; let&rsquo;s assume that I want to build a class that allows persons to train their own neural network, and make it such that it only accepts valid hyper-parameters, and let&rsquo;s call this class <code>ConvNetTrainer</code>:</p>
+<pre><code class="language-python">class ConvNetTrainer:
+    lr = ValidateLearningRate()
+    kernel_size = ValidateKernelSize()
+    # rest of class body 
+    # ...
+    def __init__(self, lr, kernel_size):
+        self.lr = lr
+        self.kernel_size = kernel_size
+</code></pre>
+<p>Now let&rsquo;s try an experiment, let&rsquo;s test the quality of the error messages using: either one of the validated classes above vs. a default error message from a popular DL library (such as TensorFlow or FastAI):</p>
+<pre><code class="language-python">import tensorflow as tf
+import tensorflow_hub as hub
+from tensorflow.keras import optimizers
+
+opt = optimizers.Adam(learning_rate=-2) # This should not even be valid!!!
+
+</code></pre>
+<pre><code class="language-python">convnet_trainer = ConvNetTrainer(lr=-2, kernel_size=3)
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+Cell In [20], line 1
+----&gt; 1 convnet_trainer = ConvNetTrainer(lr=-2, kernel_size=3)
+
+
+Cell In [17], line 7, in ConvNetTrainer.__init__(self, lr, kernel_size)
+      6 def __init__(self, lr, kernel_size):
+----&gt; 7     self.lr = lr
+      8     self.kernel_size = kernel_size
+
+
+Cell In [11], line 7, in Validated.__set__(self, instance, value)
+      6 def __set__(self, instance, value):
+----&gt; 7     value = self.validate(instance, value)
+      8     super().__set__(instance, value)
+
+
+Cell In [12], line 5, in ValidateLearningRate.validate(self, instance, value)
+      3 def validate(self, instance, value):
+      4     if value &lt; 0 or value &gt; 1:
+----&gt; 5         raise ValueError('LearningRate must be &gt; 0 and &lt;= 1')
+      6     return value
+
+
+ValueError: LearningRate must be &gt; 0 and &lt;= 1
+</code></pre>
+<p>An actually useful error message!!</p>
+<p>In this hypothetical example, my end-user <strong>only</strong> interacts with the high-level class, and does not need to worry about the internals of <em>how</em> it goes about validation, only that it does. Additionally, if my validation method changes or becomes more robust, I don&rsquo;t need to update every single class using these values, rather only the parent classes (which subclasses <code>Validated</code> need be updated)</p>
+
+
+              
+          </article>
+          
+
+<ul class="tags__list">
+    
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/python/">python</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/metaprogramming/">metaprogramming</a>
+    </li></ul>
+
+ <div class="pagination">
+  
+    <a class="pagination__item" href="https://aadi-blogs.web.app/blog/python-properties/">
+        <span class="pagination__label">Previous Post</span>
+        <span class="pagination__title">Encapsulation with Python Properties</span>
+    </a>
+  
+
+  
+    <a class="pagination__item" href="https://aadi-blogs.web.app/blog/enforce-override/">
+      <span class="pagination__label">Next Post</span>
+      <span class="pagination__title" >Enforcing Function Implementation in Subclasses</span>
+    </a>
+  
+</div>
+
+          
+          <footer class="post__footer">
+            
+
+
+<div class="social-icons">
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Twitter"
+        href="https://twitter.com/__aadiDev__"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/twitter.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="GitHub"
+        href="https://github.com/aadi350"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/github.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="LinkedIn"
+        href="https://www.linkedin.com/in/aadidev-sooknanan/"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/linkedin.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Email"
+        href="mailto:aadidevsooknanan@gmail.com"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/email.svg')"></div>
+      </a>
+    
+     
+</div>
+
+            <p>©2022 2022</p>
+          </footer>
+          </div>
+      </div>
+      
+      <div class="toc-container">
+          
+        <nav id="TableOfContents"></nav>
+      </div>
+      
+    </div>
+    
+
+  </main>
+
+   
+
+  
+  <script src="/js/index.min.301a8b0870381bf76b3b5182e8966d363a0474281183439beb024d8b8228fc66.js" integrity="sha256-MBqLCHA4G/drO1GC6JZtNjoEdCgRg0Ob6wJNi4Io/GY=" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"
+    data-autoloader-path="https://unpkg.com/prismjs@1.20.0/components/"></script>
+
+  
+    <script src="/js/table-of-contents.js"></script>
+  
+
+
+</body>
+
+</html>
