@@ -7,7 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2022 {year}</copyright>
-    <lastBuildDate>Wed, 09 Nov 2022 12:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Dec 2022 06:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>XGBoost, Imbalanced Classification and Hyperopt</title>
+      <link>https://aadi-blogs.web.app/blog/hyperparamtuning/</link>
+      <pubDate>Tue, 06 Dec 2022 06:38:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/hyperparamtuning/</guid>
+      <description>This is a tutorial/explanation of how to set up XGBoost for imbalanced classification while tuning for imbalanced data.
+There are three main sections:
+Hyperopt/Bayesian Hyperparameter Tuning Focal and Crossentropy losses XGBoost Parameter Meanings (references are dropped as-needed)
+Hyperopt The hyperopt package is associated with Bergstra et. al.. The authors argued that the performance of a given model depends both on the fundamental quality of the algorithm as well as details of its tuning (also known as its hyper-parameters).</description>
+    </item>
+    
     <item>
       <title>Enforcing Function Implementation in Subclasses</title>
       <link>https://aadi-blogs.web.app/blog/enforce-override/</link>

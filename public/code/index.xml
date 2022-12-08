@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2022 {year}</copyright>
-    <lastBuildDate>Wed, 30 Nov 2022 00:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/code/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 08 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/code/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>XGBoost Evaluation Classes</title>
+      <link>https://aadi-blogs.web.app/code/xgboost-eval/</link>
+      <pubDate>Thu, 08 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/xgboost-eval/</guid>
+      <description>false</description>
+    </item>
+    
     <item>
       <title>TensorFlow Custom Loop</title>
       <link>https://aadi-blogs.web.app/code/tf-loop/</link>

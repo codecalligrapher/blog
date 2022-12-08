@@ -68,5 +68,9 @@ copyright = "©2022 {year}"
   title = "code"
   url = "/code"
 
-
+[[menu.main]]
+  identifier = "resume"
+  name = "resume"
+  title = "resume"
+  url = "https://drive.google.com/file/d/1cGihNgZQo_pdVjigf7tJ6LxPu7Y94_ru/view?usp=share_link"
 

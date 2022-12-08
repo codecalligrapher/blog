@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>xgboost on Aadi</title>
+    <link>https://aadi-blogs.web.app/tags/xgboost/</link>
+    <description>Recent content in xgboost on Aadi</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>©2022 {year}</copyright>
+    <lastBuildDate>Thu, 08 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/tags/xgboost/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>XGBoost Evaluation Classes</title>
+      <link>https://aadi-blogs.web.app/code/xgboost-eval/</link>
+      <pubDate>Thu, 08 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/xgboost-eval/</guid>
+      <description>false</description>
+    </item>
+    
+  </channel>
+</rss>

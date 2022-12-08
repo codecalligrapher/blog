@@ -1,7 +1,6 @@
 ---
 heading: "Hi, I'm Aadidev"
-# subheading: "Data Wizard ®"
 subheading: "Data Scientist,"
-subsubheading: "see: wizard, data-magician"
+subsubheading: "see: wizard, sorcerer"
 # handle: "__aadiDev__"
 ---
