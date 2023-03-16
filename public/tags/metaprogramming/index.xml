@@ -7,7 +7,38 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2022 {year}</copyright>
-    <lastBuildDate>Wed, 09 Nov 2022 12:38:42 -0400</lastBuildDate><atom:link href="https://aadi-blogs.web.app/tags/metaprogramming/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 24 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/tags/metaprogramming/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Patterns for Customizing Class Creation</title>
+      <link>https://aadi-blogs.web.app/blog/custom-init-subclass/</link>
+      <pubDate>Sat, 24 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/custom-init-subclass/</guid>
+      <description>__init_subclass__ was introduced in PEP 487 and according to James Powell covers every use that was previously done in metaclasses (with the one exception being implementation of protocols on types). It&amp;rsquo;s main purpose was to customize subclass creation
+Just to get it out of the way, let&amp;rsquo;s see the order in which these functions are called (the other functions being __new__ and __init__)
+class Parent: def __init__(self, *args, **kwargs) -&amp;gt; None: print(&#39;Parent __init__&#39;) def __new__(cls, *args, **kwargs): print(&#39;Parent __new__&#39;) return super().</description>
+    </item>
+    
+    <item>
+      <title>Metaclass for Auto Initialization</title>
+      <link>https://aadi-blogs.web.app/code/initmeta/</link>
+      <pubDate>Wed, 21 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/initmeta/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Experiments customizing `__new__` in Python</title>
+      <link>https://aadi-blogs.web.app/blog/customizing_new/</link>
+      <pubDate>Mon, 12 Dec 2022 06:38:42 -0400</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/blog/customizing_new/</guid>
+      <description>object.__new__(cls[, ...]) __new__ is called to create a new instance of class cls. It is a static method, which takes the class of which an instances was requested as its first argument. Remaining are arguments passed into the constructor. The return value should be a new object instance (if this is not returned, the instance is not created)
+Typically call super().__new(cls[, ...]).
+__init__ vs __new__ According to the python docs, __new__ was for customizing instance creation when subclassing built-int types.</description>
+    </item>
+    
     <item>
       <title>Enforcing Function Implementation in Subclasses</title>
       <link>https://aadi-blogs.web.app/blog/enforce-override/</link>

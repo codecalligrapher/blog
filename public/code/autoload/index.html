@@ -2,12 +2,12 @@
 <html lang="en-us">
 
 <head>
-  <title>PySpark Fill Rates | Aadi</title>
+  <title>Dictionary for Automatically Loading Tables | Aadi</title>
 
   <meta charset="UTF-8">
   <meta name="language" content="en">
   <meta name="description" content="">
-  <meta name="keywords" content="python , pyspark">
+  <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,7 +15,7 @@
   
   
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="PySpark Fill Rates" />
+  <meta name="twitter:title" content="Dictionary for Automatically Loading Tables" />
   <meta name="twitter:description" content=""/>
   <meta name="twitter:site" content="@__aadiDev__" />
   <meta name="twitter:creator" content="https://twitter.com/__aadiDev__" />
@@ -50,8 +50,8 @@
     { 
       "@context": "http://schema.org", 
       "@type": "WebSite", 
-      "url": "https:\/\/aadi-blogs.web.app\/code\/pyspark-fill-rate\/",
-      "name": "PySpark Fill Rates",
+      "url": "https:\/\/aadi-blogs.web.app\/code\/autoload\/",
+      "name": "Dictionary for Automatically Loading Tables",
       "author": {
         "@type": "Person",
         "name": ""
@@ -105,40 +105,84 @@
       <div class="post__container">
         <div class="post">
           <header class="post__header">
-            <h1 id="post__title">PySpark Fill Rates</h1>
-            <time datetime="2022-07-21 06:38:42 -0400 AST" class="post__date">Jul 21 2022</time> 
+            <h1 id="post__title">Dictionary for Automatically Loading Tables</h1>
+            <time datetime="2023-01-26 00:00:00 &#43;0000 &#43;0000" class="post__date">Jan 26 2023</time> 
           </header>
           <article class="post__content">
               
-<pre><code class="language-python">import pyspark
-
-# missing values per column
-for k, v in sorted(
-    table.agg(*[
-        (1 - (F.count(c) / F.count('*')))
-        .alias(c + '_miss')
-        for c in table.columns])
-        .collect()[0]                       # retrieve all data to driver
-        .asDict()                           # convert to python dictionary
-        .items()                            # retrieve key-value pairs
-        , key=lambda el: el[1]
-        , reverse=True):
-    print(k, v) 
+<p>This class allows automatically loading tables on assignment, something I have to do quite often looks like the following:</p>
+<pre><code class="language-python">tables = {
+    'table1': spark.read.parquet('path/to/table1.parquet'),
+    'table2': spark.read.parquet('path/to/table2.parquet'),
+    'table3': spark.read.parquet('path/to/table3.parquet'),
+    'table4': spark.read.parquet('path/to/table4.parquet'),
+}
 </code></pre>
+<p>I want to do this instead:</p>
+<pre><code class="language-python">tables = AutoLoad({
+    'table1': 'table1.parquet',
+    'table2': 'table2.parquet',
+    'table3': 'table3.parquet',
+    'table4': 'table4.parquet',
+})
+</code></pre>
+<p>And have the data-structure handle the boiler for reading everything! The following accomplishes this with a custom ROOT path and callable for reader to be passed in :</p>
+<pre><code class="language-python">import logging
+from collections import UserDict
+from typing import Callable
+
+from pandas import read_csv
+
+
+class AutoLoad(dict):
+    &quot;&quot;&quot;Automatically loads tables when key is set&quot;&quot;&quot;
+
+    def __init__(self, reader: Callable, ROOT: str, *args, **kwargs):
+        self.reader = reader
+        self.ROOT = ROOT
+        self.update(*args, **kwargs)
+
+    def __setitem__(self, key: str, item: str) -&gt; None:
+        table = self.reader(self.ROOT + item)
+        dict.__setitem__(self, key, table)
+
+    def update(self, *args, **kwargs):
+        for k, v in dict(*args, **kwargs).items():
+            self[k] = v
+
+
+</code></pre>
+<p>The following works!!!</p>
+<pre><code class="language-python">tables = AutoLoad(read_csv, &quot;./&quot;, {&quot;a&quot;: &quot;10_test.csv&quot;})
+</code></pre>
+<p>and so does this:</p>
+<pre><code class="language-python">tables = AutoLoad(read_csv)
+tables['a'] = '10_test.csv'
+</code></pre>
+<p>Might add some error-handling eventually</p>
 
 
               
           </article>
           
 
+<ul class="tags__list">
+    
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/python/">python</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/data-science/">data-science</a>
+    </li></ul>
+
  <div class="pagination">
   
-
-  
-    <a class="pagination__item" href="https://aadi-blogs.web.app/code/sync-script/">
-      <span class="pagination__label">Next Post</span>
-      <span class="pagination__title" >Sync Script</span>
+    <a class="pagination__item" href="https://aadi-blogs.web.app/code/initmeta/">
+        <span class="pagination__label">Previous Post</span>
+        <span class="pagination__title">Metaclass for Auto Initialization</span>
     </a>
+  
+
   
 </div>
 

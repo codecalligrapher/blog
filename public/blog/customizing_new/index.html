@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>Experiments customizing `__new__` in Python | Aadi</title>
+
+  <meta charset="UTF-8">
+  <meta name="language" content="en">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  
+  
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Experiments customizing `__new__` in Python" />
+  <meta name="twitter:description" content=""/>
+  <meta name="twitter:site" content="@__aadiDev__" />
+  <meta name="twitter:creator" content="https://twitter.com/__aadiDev__" />
+  
+
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+
+
+  
+  
+    
+ 
+  
+  
+  
+  
+  
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/post.min.e698f6b3b067916a386cc08bdd04238ac76cc99155c3a0385cb5b85ea38beb30.css" integrity="sha256-5pj2s7BnkWo4bMCL3QQjisdsyZFVw6A4XLW4XqOL6zA="/>
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/custom.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" integrity="sha256-47DEQpj8HBSa&#43;/TImW&#43;5JCeuQeRkm5NMpJWZG3hSuFU="/>
+  
+  
+   
+   
+    
+
+<script type="application/ld+json">
+  
+    {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/aadi-blogs.web.app\/"
+      },
+      "articleSection" : "blog",
+      "name" : "Experiments customizing `__new__` in Python",
+      "headline" : "Experiments customizing `__new__` in Python",
+      "description" : "",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2022",
+      "datePublished": "2022-12-12 06:38:42 -0400 AST",
+      "dateModified" : "2022-12-12 06:38:42 -0400 AST",
+      "url" : "https:\/\/aadi-blogs.web.app\/blog\/customizing_new\/",
+      "wordCount" : "1719",
+      "keywords" : ["Blog"]
+    }
+  
+  </script>
+</head>
+
+<body>
+  <div class="burger__container">
+  <div class="burger" aria-controls="navigation" aria-label="Menu">
+    <div class="burger__meat burger__meat--1"></div>
+    <div class="burger__meat burger__meat--2"></div>
+    <div class="burger__meat burger__meat--3"></div>
+  </div>
+</div>
+ 
+
+  <nav class="nav" id="navigation">
+  <ul class="nav__list">
+    
+    
+      <li>
+        <a  href="/">about</a>
+      </li>
+    
+      <li>
+        <a  class="active"
+         href="/blog">blog</a>
+      </li>
+    
+      <li>
+        <a  href="/code">code</a>
+      </li>
+    
+      <li>
+        <a  href="https://drive.google.com/file/d/1cGihNgZQo_pdVjigf7tJ6LxPu7Y94_ru/view?usp=share_link">resume</a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+  <main>
+    
+    
+
+    <div class="flex-wrapper">
+      <div class="post__container">
+        <div class="post">
+          <header class="post__header">
+            <h1 id="post__title">Experiments customizing `__new__` in Python</h1>
+            <time datetime="2022-12-12 06:38:42 -0400 AST" class="post__date">Dec 12 2022</time> 
+          </header>
+          <article class="post__content">
+              
+<h2 id="object__new__cls-"><code>object.__new__(cls[, ...])</code><a class="anchor" href="#object__new__cls-">#</a></h2>
+<p><code>__new__</code> is called to create a new instance of class <code>cls</code>. It is a static method, which takes the class of which an instances was requested as its first argument. Remaining are arguments passed into the constructor. The return value should be <strong>a</strong> new object instance (if this is not returned, the instance is not created)</p>
+<p>Typically call <code>super().__new(cls[, ...])</code>.</p>
+<h3 id="__init__-vs-__new__"><code>__init__</code> vs <code>__new__</code><a class="anchor" href="#__init__-vs-__new__">#</a></h3>
+<p>According to the python docs, <code>__new__</code> was for customizing instance creation when subclassing built-int types. Since it&rsquo;s invoked before <code>__init__</code>, it is called with the CLASS as it&rsquo;s first argument (whereas <code>__init__</code> is called with an instance as its first and doesn&rsquo;t return anything)</p>
+<p><code>__new__()</code> is intended mainly to allow subclasses of immutable types (like int, str, or tuple) to customize instance creation. It is also commonly overridden in custom metaclasses in order to customize class creation.</p>
+<p>Because <code>__new__()</code> and <code>__init__()</code> work together in constructing objects (<code>__new__()</code> to create it, and <code>__init__()</code> to customize it), no non-None value may be returned by <code>__init__</code>; doing so will cause a TypeError to be raised at runtime.</p>
+<p>Concisely:
+<code>__new__</code> simply allocates memory for the object. The instance variables of an object needs memory to hold it, and this is what the step <code>__new__</code> would do.</p>
+<p><code>__init__</code> initialize the internal variables of the object to specific values (could be default).</p>
+<pre><code class="language-python"># making the call-order of __init__ and __new__ clear
+class A:
+    def __new__(cls: type,*args, **kwargs):
+        print(f'{cls}.__new__')
+        print(f'args: {args}')
+        print(f'kwargs: {kwargs}')
+        # actually creates the object
+        return object().__new__(A, **kwargs)
+
+    def __init__(self, *args, **kwargs) -&gt; None:
+        # at this point the object is already created
+        print(f'{self}.__init__')
+        print(f'args: {args}')
+        print(f'kwargs: {kwargs}')
+
+a = A()
+
+</code></pre>
+<pre><code>&lt;class '__main__.A'&gt;.__new__
+args: ()
+kwargs: {}
+&lt;__main__.A object at 0x7f84ecf9fc70&gt;.__init__
+args: ()
+kwargs: {}
+</code></pre>
+<p>Exploring the execution order without using the <code>class</code> keyword</p>
+<pre><code class="language-python">type(a), type(type(a)), type(type(type(a))) # hmm
+</code></pre>
+<pre><code>(__main__.A, type, type)
+</code></pre>
+<pre><code class="language-python">dis(A.__init__)
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+Cell In [24], line 1
+----&gt; 1 dis(A.__init__)
+
+
+File ~/miniconda3/envs/basic_clean/lib/python3.8/dis.py:85, in dis(x, file, depth)
+     83     _disassemble_str(x, file=file, depth=depth)
+     84 else:
+---&gt; 85     raise TypeError(&quot;don't know how to disassemble %s objects&quot; %
+     86                     type(x).__name__)
+
+
+TypeError: don't know how to disassemble wrapper_descriptor objects
+</code></pre>
+<p>If we use the <code>type</code> function to create a new class (EXACTLY the same as above), since <code>class</code> is syntactic sugar for doing something similar to the following:</p>
+<pre><code class="language-python"># creating classes without using the word class
+
+# set the functions to create class
+def __new__(cls: type,*args, **kwargs):
+    print(f'{cls}.__new__')
+    print(f'args: {args}')
+    print(f'kwargs: {kwargs}')
+    # actually creates the object
+    return object().__new__(A, **kwargs)
+
+def __init__(self, *args, **kwargs) -&gt; None:
+    # at this point the object is already created
+    print(f'{self}.__init__')
+    print(f'args: {args}')
+    print(f'kwargs: {kwargs}')
+
+name = 'A'
+bases = ()
+namespace = {
+
+        '__init__': __init__,
+        '__new__': __new__
+}
+
+A = type(name, bases, namespace) # THIS is how classes are created
+# since every class is an instance of type
+
+# creating an instance
+a = A() # same as with the class keyword
+</code></pre>
+<pre><code>&lt;class '__main__.A'&gt;.__new__
+args: ()
+kwargs: {}
+&lt;__main__.A object at 0x7f84ece00ac0&gt;.__init__
+args: ()
+kwargs: {}
+</code></pre>
+<h2 id="implementing-the-factory-pattern">Implementing the Factory Pattern<a class="anchor" href="#implementing-the-factory-pattern">#</a></h2>
+<p>the <code>__new__</code> function determines what <code>type</code> of object to return based on the inputs. This is important, since if it was done in <code>__init__</code>, the object would have been created <em>prior</em>.</p>
+<h3 id="basic-example">Basic Example<a class="anchor" href="#basic-example">#</a></h3>
+<p>Let&rsquo;s say we wanted to create an Index based on the type of data input. (This is essentially replicating <code>pandas</code> default functionality and something that arises very frequently: creating some instance based on input values):</p>
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+
+normal_index_data = np.linspace(1, 5, 5)
+index = pd.Index(normal_index_data)
+
+type(index) # It automatically created the Float64Index
+</code></pre>
+<pre><code>pandas.core.indexes.numeric.Float64Index
+</code></pre>
+<pre><code class="language-python">datetime_index_data = [np.datetime64('2022-12-01'), np.datetime64('2023-01-01'),np.datetime64('2023-02-01') ]
+
+index = pd.Index(datetime_index_data)
+type(index) # It detected that the datatype was of datetime64 and adjusted accordingly
+</code></pre>
+<pre><code>pandas.core.indexes.datetimes.DatetimeIndex
+</code></pre>
+<pre><code class="language-python">from typing import TypeVar, Generic, List, Union, overload
+from typing_extensions import Protocol
+from datetime import datetime
+from numpy import datetime64
+from pandas import DatetimeIndex
+from typing import overload
+
+T = TypeVar(&quot;T&quot;, covariant=True)
+S = TypeVar(&quot;S&quot;)
+
+class Index:
+    def __new__(cls, values):
+        if type(values[0]) in (datetime, datetime64):
+            cls = DatetimeIndex
+        else:
+            cls = DefaultIndex
+        return object.__new__(cls)
+
+
+class DefaultIndex(Index, Generic[S]):
+    def __init__(self, values: List[S]):
+        self.values = values
+
+    def first(self):
+        return self.values[0]
+
+
+</code></pre>
+<pre><code class="language-python">index, dt_index = DefaultIndex(normal_index_data), DefaultIndex(datetime_index_data)
+
+# It detected the typye of data input
+type(index), type(dt_index)
+</code></pre>
+<pre><code>(__main__.DefaultIndex, pandas.core.indexes.datetimes.DatetimeIndex)
+</code></pre>
+<p>In the above, the <code>__new__</code> method intercepts the arguments to <code>__init__</code> and customized the <em>type</em> of object being returned. Since the object is created in <code>__new__</code> <strong>not <code>__init__</code></strong>, then doing this in <code>__init__</code> would be too late in the object-creation process, also <code>__init__</code> cannot return anything except <code>None</code>, so the following straight-up does not work</p>
+<pre><code class="language-python">class BadDefaultIndex:
+    def __init__(self, values: list):
+        if type(values[0]) in (datetime, datetime64):
+            return DatetimeIndex(values)
+        else:
+            return DefaultIndex(values)
+
+bad_index = BadDefaultIndex(datetime_index_data)
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+Cell In [15], line 8
+      5         else:
+      6             return DefaultIndex(values)
+----&gt; 8 bad_index = BadDefaultIndex(datetime_index_data)
+
+
+TypeError: __init__() should return None, not 'DatetimeIndex'
+</code></pre>
+<h3 id="a-not-so-basic-example">A Not-so-Basic Example<a class="anchor" href="#a-not-so-basic-example">#</a></h3>
+<p>A LOT of the information/ideas for this section comes from <a href="https://stackoverflow.com/questions/28035685/improper-use-of-new-to-generate-class-instances/28076300#28076300" 
+  
+   target="_blank" rel="noreferrer noopener" 
+>this StackOverflow answer</a></p>
+<p>Let&rsquo;s say you wanted to implement a series of classes to handle different types of file-sysmtems (e.g. <code>UFS</code>, <code>NFS</code>, local-drive etc), and you wanted to implement a single Base class with common functionality to be subclassed. The issue is, we wish to return a class whose <code>type</code> is determined by the input string to the parent class, which again can <strong>not</strong> be done via <code>__init__</code> since this is too late in the python object model</p>
+<pre><code class="language-python">import os
+import re
+
+# this is the parent class
+class FileSystem(object):
+
+    # Pattern for matching &quot;xxx://&quot;  # x is any non-whitespace character except for &quot;:&quot;.
+    _PATH_PREFIX_PATTERN = re.compile(r'\s*([^:]+)://')
+    # Registered subclasses.
+    _registry = {}  
+
+    @classmethod
+    def __init_subclass__(cls, **kwargs):
+        '''
+            We use __init_subclass__ to instantiate subclasses AND
+            add subclasses to a registry depending on the type of filesystem
+        '''
+        super().__init_subclass__(**kwargs)
+        cls._registry[cls._path_prefix] = cls  # Add class to registry.
+
+    @classmethod
+    def _get_prefix(cls, s):
+        '''Extract any file system prefix at beginning of string s and
+            return a lowercase version of it or None when there isn't one.
+        ''' 
+        match = cls._PATH_PREFIX_PATTERN.match(s)
+        return match.group(1).lower() if match else None
+
+    def __new__(cls, path):
+        '''This is where the magic happens!'''
+        # Firstly, get the prefix of the path passed in
+        path_prefix = cls._get_prefix(path)
+
+        # get the appropriate subclass from the registry
+        subclass = cls._registry.get(path_prefix)
+        # if the subclass exists, return a new instance of it
+        if subclass:
+            # use object.__new__ to prevent infinite recursion
+            return object.__new__(subclass)
+        else:  
+            # No subclass with matching prefix found (and no default).
+            raise Exception('Invalid file path input')
+
+    # define additional, general functionality
+    def foo(self, *args, **kwargs):
+        pass
+
+    def bar(self, *args, **kwargs):
+        pass
+
+    def baz(self, *args, **kwargs):
+        pass
+
+
+# create subclasses
+# path_prefix is passed to __init_subclass__ in the parent
+class UFS(FileSystem):
+    _path_prefix='ufs'
+    def __init__(self, path):
+        pass
+
+class NFS(FileSystem):
+    _path_prefix='nfs'
+    def __init__(self, path):
+        pass
+</code></pre>
+<p>Now, we can create filesystem objects, whose type depends on the input string:</p>
+<pre><code class="language-python">fs1 = FileSystem('ufs://192.168.0.1')
+fs2 = FileSystem('nfs://192.168.0.1')
+
+type(fs1), type(fs2) 
+</code></pre>
+<pre><code>(__main__.UFS, __main__.NFS)
+</code></pre>
+<p>there&rsquo;s a slightly-different implementation, where the <code>__init_subclass__</code> method was used with a keyword-argument to define the <code>path_prefix</code>, but as the default implementation of this new hook <em>does not natively support kwargs</em>, the above implementation using class attributes is instead preferred</p>
+<h2 id="implementing-the-flyweight-pattern">Implementing the Flyweight Pattern<a class="anchor" href="#implementing-the-flyweight-pattern">#</a></h2>
+<p><em>warning, this is NOT data-science specific</em></p>
+<p>The flyweight pattern is designed for conserving memory; if we have hundreds of thousands of similar objects, combining similar properties into a flyweight can have an enormous impact on memory consumption. It is common for programming solutions that optimize CPU, memory, or disk space result in more complicated code than their unoptimized brethren.</p>
+<p>It is therefore important to weigh up the tradeoffs when deciding between code maintainability and optimization.</p>
+<p>The Gang Of Four (GoF) book lists the following requirements that need to be satisfied
+to effectively use the Flyweight Pattern [GOF95, page 221]:</p>
+<ul>
+<li>The application needs to use a large number of objects.</li>
+<li>There are so many objects that it&rsquo;s too expensive to store/render them. Once the mutable state is removed (because if it is required, it should be passed explicitly to Flyweight by the client code), many groups of distinct objects can be replaced by relatively few shared objects.</li>
+<li>Object identity is not important for the application. We cannot rely on object identity because object sharing causes identity comparisons to fail (objects that appear different to the client code, end up having the same identity).</li>
+</ul>
+<p>(At this point I&rsquo;d make a joke about &ldquo;premature optimization affecting 1 in 10 Python programmers blah blah&rdquo; since it can introduce un-warrented complexity at early stages, but I digress..)</p>
+<p>This example is taken from <em>Python: Master the Art of Design Patterns</em> by Phillips.
+The idea is that, we have a basic parent class for Cars, and we only wish to have as many instances as there are car types. So if we call <code>CarModel('CRV')</code> for the FIRST time, we create a new <code>CarModel</code> instance with all the custom attributes input, but if we call <code>CarModel('Taycan')</code> 7 times in a row, a new instance is only created once.</p>
+<p>Again, this is an edge-case design pattern, and should never be the first thing to reach for</p>
+<pre><code class="language-python">import weakref
+class CarModel:
+
+    _models = weakref.WeakValueDictionary()
+
+    def __new__(cls, model_name, *args, **kwargs):
+        model = cls._models.get(model_name)
+
+        if not model:
+            print('new instance created!')
+            model = super().__new__(cls)
+        cls._models[model_name] = model
+        return model
+
+    
+    def __init__(self, model_name, air=False, tilt=False,
+        cruise_control=False, power_locks=False,
+        alloy_wheels=False, usb_charger=False):
+        if not hasattr(self, &quot;initted&quot;):
+            self.model_name = model_name
+            self.air = air
+            self.tilt = tilt
+            self.cruise_control = cruise_control
+            self.power_locks = power_locks
+            self.alloy_wheels = alloy_wheels
+            self.usb_charger = usb_charger
+            self.initted=True
+</code></pre>
+<pre><code class="language-python">c = CarModel('CRV', usb_charger=True)
+hasattr(c, 'initted')
+</code></pre>
+<pre><code>new instance created!
+True
+</code></pre>
+<pre><code class="language-python">CarModel('Porsche Taycan') # instance created here
+</code></pre>
+<pre><code>new instance created!
+&lt;__main__.CarModel at 0x7f6ac6c29bb0&gt;
+</code></pre>
+<pre><code class="language-python">CarModel('Porsche Taycan') # but not here
+</code></pre>
+<pre><code>&lt;__main__.CarModel at 0x7f6ac6c29bb0&gt;
+</code></pre>
+<pre><code class="language-python"># if we look at CarModel _models, we see single examples of each model 
+list(CarModel._models.items())
+</code></pre>
+<pre><code>[('CRV', &lt;__main__.CarModel at 0x7f6ac6c29fd0&gt;),
+ ('Porsche Taycan', &lt;__main__.CarModel at 0x7f6ac6c29bb0&gt;)]
+</code></pre>
+<h2 id="a-non-example">A Non-Example<a class="anchor" href="#a-non-example">#</a></h2>
+<p>I think this is useful, but I haven&rsquo;t as yet found an application that warrants this complexity. In the following example, we can <em>dynamically define the <code>__init__</code> function within <strong>new</strong></em>, and customize the initialization of classes based on input arguments</p>
+<pre><code class="language-python">class MyClass:
+  def __new__(cls, *args, **kwargs):
+    # Define the __init__ method as a string
+    init_str = &quot;&quot;&quot;def __init__(self, *args, **kwargs):
+        # Initialize instance variables here
+        self.var1 = args[0]
+        self.var2 = args[1]
+        # Perform setup tasks here
+        print(&quot;Initializing instance of MyClass&quot;)
+    &quot;&quot;&quot;
+
+    # Execute the __init__ method code
+    exec(init_str, locals(), locals())
+
+    # Return a new instance of the class
+    return super().__new__(cls)
+</code></pre>
+
+
+              
+          </article>
+          
+
+<ul class="tags__list">
+    
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/metaprogramming/">metaprogramming</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/python/">python</a>
+    </li></ul>
+
+ <div class="pagination">
+  
+    <a class="pagination__item" href="https://aadi-blogs.web.app/blog/hyperparamtuning/">
+        <span class="pagination__label">Previous Post</span>
+        <span class="pagination__title">XGBoost, Imbalanced Classification and Hyperopt</span>
+    </a>
+  
+
+  
+    <a class="pagination__item" href="https://aadi-blogs.web.app/blog/custom-init-subclass/">
+      <span class="pagination__label">Next Post</span>
+      <span class="pagination__title" >Patterns for Customizing Class Creation</span>
+    </a>
+  
+</div>
+
+          
+          <footer class="post__footer">
+            
+
+
+<div class="social-icons">
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Twitter"
+        href="https://twitter.com/__aadiDev__"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/twitter.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="GitHub"
+        href="https://github.com/aadi350"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/github.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="LinkedIn"
+        href="https://www.linkedin.com/in/aadidev-sooknanan/"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/linkedin.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a
+        class="social-icons__link"
+        title="Email"
+        href="mailto:aadidevsooknanan@gmail.com"
+        target="_blank"
+        rel="me noopener"
+      >
+        <div class="social-icons__icon" style="background-image: url('https://aadi-blogs.web.app/svg/email.svg')"></div>
+      </a>
+    
+     
+</div>
+
+            <p>©2022 2023</p>
+          </footer>
+          </div>
+      </div>
+      
+      <div class="toc-container">
+          
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#object__new__cls-"><code>object.__new__(cls[, ...])</code></a>
+      <ul>
+        <li><a href="#__init__-vs-__new__"><code>__init__</code> vs <code>__new__</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#implementing-the-factory-pattern">Implementing the Factory Pattern</a>
+      <ul>
+        <li><a href="#basic-example">Basic Example</a></li>
+        <li><a href="#a-not-so-basic-example">A Not-so-Basic Example</a></li>
+      </ul>
+    </li>
+    <li><a href="#implementing-the-flyweight-pattern">Implementing the Flyweight Pattern</a></li>
+    <li><a href="#a-non-example">A Non-Example</a></li>
+  </ul>
+</nav>
+      </div>
+      
+    </div>
+    
+
+  </main>
+
+   
+
+  
+  <script src="/js/index.min.301a8b0870381bf76b3b5182e8966d363a0474281183439beb024d8b8228fc66.js" integrity="sha256-MBqLCHA4G/drO1GC6JZtNjoEdCgRg0Ob6wJNi4Io/GY=" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"
+    data-autoloader-path="https://unpkg.com/prismjs@1.20.0/components/"></script>
+
+  
+    <script src="/js/table-of-contents.js"></script>
+  
+
+
+</body>
+
+</html>

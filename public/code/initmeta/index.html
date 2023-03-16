@@ -2,12 +2,12 @@
 <html lang="en-us">
 
 <head>
-  <title>PySpark Fill Rates | Aadi</title>
+  <title>Metaclass for Auto Initialization | Aadi</title>
 
   <meta charset="UTF-8">
   <meta name="language" content="en">
   <meta name="description" content="">
-  <meta name="keywords" content="python , pyspark">
+  <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,7 +15,7 @@
   
   
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="PySpark Fill Rates" />
+  <meta name="twitter:title" content="Metaclass for Auto Initialization" />
   <meta name="twitter:description" content=""/>
   <meta name="twitter:site" content="@__aadiDev__" />
   <meta name="twitter:creator" content="https://twitter.com/__aadiDev__" />
@@ -50,8 +50,8 @@
     { 
       "@context": "http://schema.org", 
       "@type": "WebSite", 
-      "url": "https:\/\/aadi-blogs.web.app\/code\/pyspark-fill-rate\/",
-      "name": "PySpark Fill Rates",
+      "url": "https:\/\/aadi-blogs.web.app\/code\/initmeta\/",
+      "name": "Metaclass for Auto Initialization",
       "author": {
         "@type": "Person",
         "name": ""
@@ -105,25 +105,61 @@
       <div class="post__container">
         <div class="post">
           <header class="post__header">
-            <h1 id="post__title">PySpark Fill Rates</h1>
-            <time datetime="2022-07-21 06:38:42 -0400 AST" class="post__date">Jul 21 2022</time> 
+            <h1 id="post__title">Metaclass for Auto Initialization</h1>
+            <time datetime="2022-12-21 00:00:00 &#43;0000 &#43;0000" class="post__date">Dec 21 2022</time> 
           </header>
           <article class="post__content">
               
-<pre><code class="language-python">import pyspark
+<pre><code class="language-python">class InitMeta(type):
+    '''MetaClass to reduce boilerplate
+    
+    Example usage:
+    
+        Instea of defining a clas initializer with explicity initialization
+        class A:
+            def __init__(self, a, b, c, d):
+                self.a = a
+                self.b = b
+                self.c = c
+                self.d = d
 
-# missing values per column
-for k, v in sorted(
-    table.agg(*[
-        (1 - (F.count(c) / F.count('*')))
-        .alias(c + '_miss')
-        for c in table.columns])
-        .collect()[0]                       # retrieve all data to driver
-        .asDict()                           # convert to python dictionary
-        .items()                            # retrieve key-value pairs
-        , key=lambda el: el[1]
-        , reverse=True):
-    print(k, v) 
+        specifying the metaclass as InitMeta modifies the original init
+            adding class-initialization boilerplate
+        class A(metaclass=InitMeta):
+            def __init__(self, a, b, c, d):
+
+                print(self.a) # This works even though self.a was not explicitly set
+
+        This reduces the clutter when multiple attributes are passed in to the class constructor
+
+        Raises:
+            RuntimeError: if __init__ is not defined 
+    '''
+
+
+
+    import inspect
+
+    def __new__(cls, name, bases, attributes):
+        if not (cls_init := attributes.get('__init__', None)):
+            raise RuntimeError('__init__ must be specified')
+
+        init_args = list(InitMeta.inspect.signature(cls_init).parameters.keys())[1:]
+
+        def meta_init(self, *args, **kwargs):
+            # set kwargs first, else non-kwarg is overritten by get() returning None
+            for arg in init_args:
+                setattr(self, arg, kwargs.get(arg))
+
+            for arg_name, arg in zip(init_args, args):
+                setattr(self, arg_name, arg)
+
+
+            cls_init(self, *args, **kwargs)
+
+        attributes['__init__'] = meta_init
+
+        return super(InitMeta, cls).__new__(cls, name, bases, attributes)
 </code></pre>
 
 
@@ -131,13 +167,27 @@ for k, v in sorted(
           </article>
           
 
+<ul class="tags__list">
+    
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/python/">python</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/metaprogramming/">metaprogramming</a>
+    </li></ul>
+
  <div class="pagination">
+  
+    <a class="pagination__item" href="https://aadi-blogs.web.app/code/xgboost-eval/">
+        <span class="pagination__label">Previous Post</span>
+        <span class="pagination__title">XGBoost Evaluation Classes</span>
+    </a>
   
 
   
-    <a class="pagination__item" href="https://aadi-blogs.web.app/code/sync-script/">
+    <a class="pagination__item" href="https://aadi-blogs.web.app/code/autoload/">
       <span class="pagination__label">Next Post</span>
-      <span class="pagination__title" >Sync Script</span>
+      <span class="pagination__title" >Dictionary for Automatically Loading Tables</span>
     </a>
   
 </div>

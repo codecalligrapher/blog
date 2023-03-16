@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2022 {year}</copyright>
-    <lastBuildDate>Thu, 08 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/code/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/code/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dictionary for Automatically Loading Tables</title>
+      <link>https://aadi-blogs.web.app/code/autoload/</link>
+      <pubDate>Thu, 26 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/autoload/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Metaclass for Auto Initialization</title>
+      <link>https://aadi-blogs.web.app/code/initmeta/</link>
+      <pubDate>Wed, 21 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/initmeta/</guid>
+      <description>false</description>
+    </item>
+    
     <item>
       <title>XGBoost Evaluation Classes</title>
       <link>https://aadi-blogs.web.app/code/xgboost-eval/</link>
