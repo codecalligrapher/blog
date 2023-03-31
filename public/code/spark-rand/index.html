@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <title>Dictionary for Automatically Loading Tables | Aadi</title>
+  <title>Randomly Populating Pyspark Columns | Aadi</title>
 
   <meta charset="UTF-8">
   <meta name="language" content="en">
@@ -15,7 +15,7 @@
   
   
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Dictionary for Automatically Loading Tables" />
+  <meta name="twitter:title" content="Randomly Populating Pyspark Columns" />
   <meta name="twitter:description" content=""/>
   <meta name="twitter:site" content="@__aadiDev__" />
   <meta name="twitter:creator" content="https://twitter.com/__aadiDev__" />
@@ -50,8 +50,8 @@
     { 
       "@context": "http://schema.org", 
       "@type": "WebSite", 
-      "url": "https:\/\/aadi-blogs.web.app\/code\/autoload\/",
-      "name": "Dictionary for Automatically Loading Tables",
+      "url": "https:\/\/aadi-blogs.web.app\/code\/spark-rand\/",
+      "name": "Randomly Populating Pyspark Columns",
       "author": {
         "@type": "Person",
         "name": ""
@@ -105,61 +105,25 @@
       <div class="post__container">
         <div class="post">
           <header class="post__header">
-            <h1 id="post__title">Dictionary for Automatically Loading Tables</h1>
-            <time datetime="2023-01-26 00:00:00 &#43;0000 &#43;0000" class="post__date">Jan 26 2023</time> 
+            <h1 id="post__title">Randomly Populating Pyspark Columns</h1>
+            <time datetime="2023-03-16 00:00:00 &#43;0000 &#43;0000" class="post__date">Mar 16 2023</time> 
           </header>
           <article class="post__content">
               
-<p>This class allows automatically loading tables on assignment, something I have to do quite often looks like the following:</p>
-<pre><code class="language-python">tables = {
-    'table1': spark.read.parquet('path/to/table1.parquet'),
-    'table2': spark.read.parquet('path/to/table2.parquet'),
-    'table3': spark.read.parquet('path/to/table3.parquet'),
-    'table4': spark.read.parquet('path/to/table4.parquet'),
-}
+<p>Sometimes we need to create synthetic data for testing, the following is a snippet on how to create a new column with randomly populated discrete values</p>
+<pre><code class="language-python">from pyspark.sql import functions as F
+
+df.withColumn(
+  &quot;business_vertical&quot;,
+  F.array(
+    F.lit(&quot;Retail&quot;),
+    F.lit(&quot;SME&quot;),
+    F.lit(&quot;Cor&quot;),
+  ).getItem(
+    (F.rand()*3).cast(&quot;int&quot;)
+  )
+)
 </code></pre>
-<p>I want to do this instead:</p>
-<pre><code class="language-python">tables = AutoLoad({
-    'table1': 'table1.parquet',
-    'table2': 'table2.parquet',
-    'table3': 'table3.parquet',
-    'table4': 'table4.parquet',
-})
-</code></pre>
-<p>And have the data-structure handle the boiler for reading everything! The following accomplishes this with a custom ROOT path and callable for reader to be passed in :</p>
-<pre><code class="language-python">import logging
-from collections import UserDict
-from typing import Callable
-
-from pandas import read_csv
-
-
-class AutoLoad(dict):
-    &quot;&quot;&quot;Automatically loads tables when key is set&quot;&quot;&quot;
-
-    def __init__(self, reader: Callable, ROOT: str, *args, **kwargs):
-        self.reader = reader
-        self.ROOT = ROOT
-        self.update(*args, **kwargs)
-
-    def __setitem__(self, key: str, item: str) -&gt; None:
-        table = self.reader(self.ROOT + item)
-        dict.__setitem__(self, key, table)
-
-    def update(self, *args, **kwargs):
-        for k, v in dict(*args, **kwargs).items():
-            self[k] = v
-
-
-</code></pre>
-<p>The following works!!!</p>
-<pre><code class="language-python">tables = AutoLoad(read_csv, &quot;./&quot;, {&quot;a&quot;: &quot;10_test.csv&quot;})
-</code></pre>
-<p>and so does this:</p>
-<pre><code class="language-python">tables = AutoLoad(read_csv)
-tables['a'] = '10_test.csv'
-</code></pre>
-<p>Might add some error-handling eventually</p>
 
 
               
@@ -177,17 +141,12 @@ tables['a'] = '10_test.csv'
 
  <div class="pagination">
   
-    <a class="pagination__item" href="https://aadi-blogs.web.app/code/initmeta/">
+    <a class="pagination__item" href="https://aadi-blogs.web.app/code/autoload/">
         <span class="pagination__label">Previous Post</span>
-        <span class="pagination__title">Metaclass for Auto Initialization</span>
+        <span class="pagination__title">Dictionary for Automatically Loading Tables</span>
     </a>
   
 
-  
-    <a class="pagination__item" href="https://aadi-blogs.web.app/code/spark-rand/">
-      <span class="pagination__label">Next Post</span>
-      <span class="pagination__title" >Randomly Populating Pyspark Columns</span>
-    </a>
   
 </div>
 
