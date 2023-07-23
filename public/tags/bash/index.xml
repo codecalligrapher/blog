@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>bash on Aadi</title>
+    <link>https://aadi-blogs.web.app/tags/bash/</link>
+    <description>Recent content in bash on Aadi</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>©2022 {year}</copyright>
+    <lastBuildDate>Sun, 23 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/tags/bash/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bash Script for TODO finding</title>
+      <link>https://aadi-blogs.web.app/code/find-todos/</link>
+      <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/find-todos/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Emacs Shell Shortcuts</title>
+      <link>https://aadi-blogs.web.app/code/shell-shortcuts/</link>
+      <pubDate>Tue, 20 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/shell-shortcuts/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Changing File Extensions</title>
+      <link>https://aadi-blogs.web.app/code/rename-file/</link>
+      <pubDate>Wed, 03 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/rename-file/</guid>
+      <description>false</description>
+    </item>
+    
+  </channel>
+</rss>

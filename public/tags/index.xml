@@ -7,13 +7,85 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2022 {year}</copyright>
-    <lastBuildDate>Fri, 31 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>bash</title>
+      <link>https://aadi-blogs.web.app/tags/bash/</link>
+      <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/bash/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cli</title>
+      <link>https://aadi-blogs.web.app/tags/cli/</link>
+      <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/cli/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>https://aadi-blogs.web.app/tags/linux/</link>
+      <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>productivity</title>
+      <link>https://aadi-blogs.web.app/tags/productivity/</link>
+      <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/productivity/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>data-science</title>
       <link>https://aadi-blogs.web.app/tags/data-science/</link>
-      <pubDate>Fri, 31 Mar 2023 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 15 May 2023 00:00:00 +0000</pubDate>
       
       <guid>https://aadi-blogs.web.app/tags/data-science/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pandas</title>
+      <link>https://aadi-blogs.web.app/tags/pandas/</link>
+      <pubDate>Mon, 15 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/pandas/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://aadi-blogs.web.app/tags/python/</link>
+      <pubDate>Mon, 15 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>metaprogramming</title>
+      <link>https://aadi-blogs.web.app/tags/metaprogramming/</link>
+      <pubDate>Sun, 14 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/metaprogramming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kedro</title>
+      <link>https://aadi-blogs.web.app/tags/kedro/</link>
+      <pubDate>Mon, 01 May 2023 17:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/kedro/</guid>
       <description></description>
     </item>
     
@@ -23,24 +95,6 @@
       <pubDate>Fri, 31 Mar 2023 00:00:00 +0000</pubDate>
       
       <guid>https://aadi-blogs.web.app/tags/pyspark/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>https://aadi-blogs.web.app/tags/python/</link>
-      <pubDate>Fri, 31 Mar 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://aadi-blogs.web.app/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>metaprogramming</title>
-      <link>https://aadi-blogs.web.app/tags/metaprogramming/</link>
-      <pubDate>Sat, 24 Dec 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://aadi-blogs.web.app/tags/metaprogramming/</guid>
       <description></description>
     </item>
     

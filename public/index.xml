@@ -7,7 +7,61 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2022 {year}</copyright>
-    <lastBuildDate>Fri, 31 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bash Script for TODO finding</title>
+      <link>https://aadi-blogs.web.app/code/find-todos/</link>
+      <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/find-todos/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Emacs Shell Shortcuts</title>
+      <link>https://aadi-blogs.web.app/code/shell-shortcuts/</link>
+      <pubDate>Tue, 20 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/shell-shortcuts/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Mapping a Pandas Column</title>
+      <link>https://aadi-blogs.web.app/code/pd-dict-map/</link>
+      <pubDate>Mon, 15 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/pd-dict-map/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Decorator Template</title>
+      <link>https://aadi-blogs.web.app/code/decorator-template/</link>
+      <pubDate>Sun, 14 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/decorator-template/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Changing File Extensions</title>
+      <link>https://aadi-blogs.web.app/code/rename-file/</link>
+      <pubDate>Wed, 03 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/rename-file/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Kedro 0.17.X Hook Spec</title>
+      <link>https://aadi-blogs.web.app/code/kedro-hookspec/</link>
+      <pubDate>Mon, 01 May 2023 17:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/kedro-hookspec/</guid>
+      <description>false</description>
+    </item>
+    
     <item>
       <title>Setting Up Spark for PyTest</title>
       <link>https://aadi-blogs.web.app/code/pytest-spark/</link>

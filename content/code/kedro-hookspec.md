@@ -4,7 +4,7 @@ date: 2023-05-01T17:00:00-00:00
 ShowCodeCopyButtons: true
 hideSummary: true
 summary: false
-keywords: ["python", "kedro"]
+tags: ["python", "kedro"]
 comments: true
 showReadingTime: false
 ---
