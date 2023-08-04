@@ -3,7 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://aadi-blogs.web.app/</loc>
-    <lastmod>2023-07-23T00:00:00+00:00</lastmod>
+    <lastmod>2023-08-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://aadi-blogs.web.app/code/</loc>
+    <lastmod>2023-08-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://aadi-blogs.web.app/tags/data-science/</loc>
+    <lastmod>2023-08-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://aadi-blogs.web.app/code/vim-multiline-comment/</loc>
+    <lastmod>2023-08-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://aadi-blogs.web.app/tags/linux/</loc>
+    <lastmod>2023-08-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://aadi-blogs.web.app/tags/</loc>
+    <lastmod>2023-08-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://aadi-blogs.web.app/tags/vim/</loc>
+    <lastmod>2023-08-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://aadi-blogs.web.app/tags/bash/</loc>
     <lastmod>2023-07-23T00:00:00+00:00</lastmod>
@@ -14,23 +32,11 @@
     <loc>https://aadi-blogs.web.app/tags/cli/</loc>
     <lastmod>2023-07-23T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://aadi-blogs.web.app/code/</loc>
-    <lastmod>2023-07-23T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://aadi-blogs.web.app/tags/linux/</loc>
-    <lastmod>2023-07-23T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://aadi-blogs.web.app/tags/productivity/</loc>
-    <lastmod>2023-07-23T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://aadi-blogs.web.app/tags/</loc>
     <lastmod>2023-07-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://aadi-blogs.web.app/code/shell-shortcuts/</loc>
     <lastmod>2023-06-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://aadi-blogs.web.app/tags/data-science/</loc>
-    <lastmod>2023-05-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://aadi-blogs.web.app/code/pd-dict-map/</loc>
     <lastmod>2023-05-15T00:00:00+00:00</lastmod>

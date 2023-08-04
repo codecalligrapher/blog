@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <title>Bash Script for TODO finding | Aadi</title>
+  <title>How to Comment Multiple Lines in Vi | Aadi</title>
 
   <meta charset="UTF-8">
   <meta name="language" content="en">
@@ -15,7 +15,7 @@
   
   
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Bash Script for TODO finding" />
+  <meta name="twitter:title" content="How to Comment Multiple Lines in Vi" />
   <meta name="twitter:description" content=""/>
   <meta name="twitter:site" content="@tikamasaala" />
   <meta name="twitter:creator" content="https://twitter.com/tikamasaala" />
@@ -50,8 +50,8 @@
     { 
       "@context": "http://schema.org", 
       "@type": "WebSite", 
-      "url": "https:\/\/aadi-blogs.web.app\/code\/find-todos\/",
-      "name": "Bash Script for TODO finding",
+      "url": "https:\/\/aadi-blogs.web.app\/code\/vim-multiline-comment\/",
+      "name": "How to Comment Multiple Lines in Vi",
       "author": {
         "@type": "Person",
         "name": ""
@@ -105,28 +105,20 @@
       <div class="post__container">
         <div class="post">
           <header class="post__header">
-            <h1 id="post__title">Bash Script for TODO finding</h1>
-            <time datetime="2023-07-23 00:00:00 &#43;0000 &#43;0000" class="post__date">Jul 23 2023</time> 
+            <h1 id="post__title">How to Comment Multiple Lines in Vi</h1>
+            <time datetime="2023-08-04 00:00:00 &#43;0000 &#43;0000" class="post__date">Aug 4 2023</time> 
           </header>
           <article class="post__content">
               
-<blockquote>
-<p>Code finds all TODOs recursively and outputs it in a single text filu</p>
-</blockquote>
-<pre><code class="language-bash">#!/bin/bash
-
-: '
--n return line number
--i ignore case
--w match only whole words
--r recursive
-'
-rm todos.txt
-result=( $(grep &quot;TODO&quot; -rwin .))
-
-echo &quot;${result[@]}&quot; &gt; ./todos.txt
-
-</code></pre>
+<ol>
+<li>select the first caracter of your block</li>
+<li>press Ctrl+V ( this is rectangular visual selection mode)</li>
+<li>type j for each line more you want to be commented</li>
+<li>type Shift-i (like I for &ldquo;insert at start&rdquo;)</li>
+<li>type // (or # or &quot; or &hellip;)</li>
+<li>you will see the modification appearing only on the first line</li>
+<li>IMPORTANT LAST STEP: type Esc key, and there you see the added character appear on all lines</li>
+</ol>
 
 
               
@@ -136,31 +128,23 @@ echo &quot;${result[@]}&quot; &gt; ./todos.txt
 <ul class="tags__list">
     
     <li class="tag__item">
-        <a class="tag__link" href="https://aadi-blogs.web.app/tags/cli/">cli</a>
-    </li>
-    <li class="tag__item">
-        <a class="tag__link" href="https://aadi-blogs.web.app/tags/bash/">bash</a>
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/data-science/">data-science</a>
     </li>
     <li class="tag__item">
         <a class="tag__link" href="https://aadi-blogs.web.app/tags/linux/">linux</a>
     </li>
     <li class="tag__item">
-        <a class="tag__link" href="https://aadi-blogs.web.app/tags/productivity/">productivity</a>
+        <a class="tag__link" href="https://aadi-blogs.web.app/tags/vim/">vim</a>
     </li></ul>
 
  <div class="pagination">
   
-    <a class="pagination__item" href="https://aadi-blogs.web.app/code/shell-shortcuts/">
+    <a class="pagination__item" href="https://aadi-blogs.web.app/code/find-todos/">
         <span class="pagination__label">Previous Post</span>
-        <span class="pagination__title">Emacs Shell Shortcuts</span>
+        <span class="pagination__title">Bash Script for TODO finding</span>
     </a>
   
 
-  
-    <a class="pagination__item" href="https://aadi-blogs.web.app/code/vim-multiline-comment/">
-      <span class="pagination__label">Next Post</span>
-      <span class="pagination__title" >How to Comment Multiple Lines in Vi</span>
-    </a>
   
 </div>
 
