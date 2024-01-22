@@ -7,7 +7,52 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2022 {year}</copyright>
-    <lastBuildDate>Fri, 04 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 22 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>python</title>
+      <link>https://aadi-blogs.web.app/tags/python/</link>
+      <pubDate>Mon, 22 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>clustering</title>
+      <link>https://aadi-blogs.web.app/tags/clustering/</link>
+      <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/clustering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>machine-learning</title>
+      <link>https://aadi-blogs.web.app/tags/machine-learning/</link>
+      <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>databricks</title>
+      <link>https://aadi-blogs.web.app/tags/databricks/</link>
+      <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/databricks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pyspark</title>
+      <link>https://aadi-blogs.web.app/tags/pyspark/</link>
+      <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/pyspark/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>data-science</title>
       <link>https://aadi-blogs.web.app/tags/data-science/</link>
@@ -54,6 +99,15 @@
     </item>
     
     <item>
+      <title>feature-engineering</title>
+      <link>https://aadi-blogs.web.app/tags/feature-engineering/</link>
+      <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/tags/feature-engineering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>productivity</title>
       <link>https://aadi-blogs.web.app/tags/productivity/</link>
       <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
@@ -68,15 +122,6 @@
       <pubDate>Mon, 15 May 2023 00:00:00 +0000</pubDate>
       
       <guid>https://aadi-blogs.web.app/tags/pandas/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>https://aadi-blogs.web.app/tags/python/</link>
-      <pubDate>Mon, 15 May 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://aadi-blogs.web.app/tags/python/</guid>
       <description></description>
     </item>
     
@@ -99,29 +144,11 @@
     </item>
     
     <item>
-      <title>pyspark</title>
-      <link>https://aadi-blogs.web.app/tags/pyspark/</link>
-      <pubDate>Fri, 31 Mar 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://aadi-blogs.web.app/tags/pyspark/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>xgboost</title>
       <link>https://aadi-blogs.web.app/tags/xgboost/</link>
       <pubDate>Thu, 08 Dec 2022 00:00:00 +0000</pubDate>
       
       <guid>https://aadi-blogs.web.app/tags/xgboost/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>machine-learning</title>
-      <link>https://aadi-blogs.web.app/tags/machine-learning/</link>
-      <pubDate>Tue, 06 Dec 2022 06:38:42 -0400</pubDate>
-      
-      <guid>https://aadi-blogs.web.app/tags/machine-learning/</guid>
       <description></description>
     </item>
     

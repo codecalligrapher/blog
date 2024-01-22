@@ -7,7 +7,34 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2022 {year}</copyright>
-    <lastBuildDate>Fri, 04 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/code/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 22 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://aadi-blogs.web.app/code/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Read TOML variables into python globals</title>
+      <link>https://aadi-blogs.web.app/code/read_toml_python_global/</link>
+      <pubDate>Mon, 22 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/read_toml_python_global/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Distribute Cluster Evaluation</title>
+      <link>https://aadi-blogs.web.app/code/distribute-evaluate-cluster/</link>
+      <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/distribute-evaluate-cluster/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Databricks Fixtures for PyTest</title>
+      <link>https://aadi-blogs.web.app/code/db-fixtures/</link>
+      <pubDate>Fri, 18 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/db-fixtures/</guid>
+      <description>false</description>
+    </item>
+    
     <item>
       <title>How to Comment Multiple Lines in Vi</title>
       <link>https://aadi-blogs.web.app/code/vim-multiline-comment/</link>
@@ -23,6 +50,15 @@
       <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://aadi-blogs.web.app/code/find-todos/</guid>
+      <description>false</description>
+    </item>
+    
+    <item>
+      <title>Drop Columns with High Missing Values in Spark</title>
+      <link>https://aadi-blogs.web.app/code/drop-missing-pyspark/</link>
+      <pubDate>Sun, 23 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://aadi-blogs.web.app/code/drop-missing-pyspark/</guid>
       <description>false</description>
     </item>
     
